@@ -21,11 +21,9 @@ func main() {
 	}
 }
 ```
-
-#Generate server command
+# Generate server command
 *cmd/kube-apiserver/app/server.go*
-##initialize default server options
-
+## initialize default server options
 ```go
 // use cobra to generate CLI
 func NewAPIServerCommand() *cobra.Command {
@@ -45,15 +43,11 @@ func NewAPIServerCommand() *cobra.Command {
 	...
 ```
 basically there're three types of options
-
-* genericoptions(*apiserver/pkg/server/options*)
-	
+* genericoptions(*apiserver/pkg/server/options*)	
 	all kube-apiserver options are defined here. details will be in another charpter
 * kubeoptions(*kubernetes/pkg/kubeapiserver/options*)
-
 	a wrapper of genericoptions
-* KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)
-	
+* KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)	
 
 ```go
 func NewServerRunOptions() *ServerRunOptions {
