@@ -21,9 +21,9 @@ func main() {
 	}
 }
 ```
+
 #Generate server command
 *cmd/kube-apiserver/app/server.go*
-
 ##initialize default server options
 
 ```go
@@ -76,6 +76,7 @@ func NewServerRunOptions() *ServerRunOptions {
 	return &s
 }
 ```
+
 ##overwirte with user input
 ```go
 
@@ -89,6 +90,7 @@ func NewServerRunOptions() *ServerRunOptions {
 	}
 	...
 ```
+
 #Start kube-apiserver
 basically two steps here, create config and generate apiserver with that config.
 
@@ -116,6 +118,7 @@ func CreateServerChain(completedOptions completedServerRunOptions, stopCh <-chan
 	return aggregatorServer.GenericAPIServer, nil
 }
 ```
+
 ##create Kube-apiserver config
 * generate generic apiserver config
 * set api resource config 
@@ -173,6 +176,7 @@ func CreateKubeAPIServerConfig(
 }
 
 ```
+
 ##create kube-apiserver
 it simply call master complete and new function to generate a mster object which represents a kube-apiserver.
 
@@ -200,6 +204,7 @@ also generate extension server based on kube-apiserver config if there's any
 	apiExtensionsServer, err := createAPIExtensionsServer(apiExtensionsConfig, genericapiserver.NewEmptyDelegate())
 	...
 ```
+
 ##start api server
 1. call generic apiserver prerun to register api resouce which invokes master setup.
 2. call run to start generic apiserver 
