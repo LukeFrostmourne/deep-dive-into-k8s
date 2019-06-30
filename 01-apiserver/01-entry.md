@@ -44,10 +44,12 @@ func NewAPIServerCommand() *cobra.Command {
 ```
 basically there're three types of options
 * genericoptions(*apiserver/pkg/server/options*)	
+	
 	all kube-apiserver options are defined here. details will be in another charpter
 * kubeoptions(*kubernetes/pkg/kubeapiserver/options*)
+	
 	a wrapper of genericoptions
-* KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)	
+* KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)
 
 ```go
 func NewServerRunOptions() *ServerRunOptions {
@@ -70,8 +72,7 @@ func NewServerRunOptions() *ServerRunOptions {
 	return &s
 }
 ```
-
-##overwirte with user input
+## overwirte with user input
 ```go
 
 	fs := cmd.Flags()
@@ -84,8 +85,7 @@ func NewServerRunOptions() *ServerRunOptions {
 	}
 	...
 ```
-
-#Start kube-apiserver
+# Start kube-apiserver
 basically two steps here, create config and generate apiserver with that config.
 
 ```go
@@ -113,7 +113,7 @@ func CreateServerChain(completedOptions completedServerRunOptions, stopCh <-chan
 }
 ```
 
-##create Kube-apiserver config
+## create Kube-apiserver config
 * generate generic apiserver config
 * set api resource config 
 * set stoarge config
@@ -170,8 +170,7 @@ func CreateKubeAPIServerConfig(
 }
 
 ```
-
-##create kube-apiserver
+## create kube-apiserver
 it simply call master complete and new function to generate a mster object which represents a kube-apiserver.
 
 ```go
@@ -199,10 +198,9 @@ also generate extension server based on kube-apiserver config if there's any
 	...
 ```
 
-##start api server
+## start api server
 1. call generic apiserver prerun to register api resouce which invokes master setup.
 2. call run to start generic apiserver 
-
 
 ```go
 func (s *GenericAPIServer) PrepareRun() preparedGenericAPIServer {
