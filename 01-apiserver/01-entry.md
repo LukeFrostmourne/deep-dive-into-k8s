@@ -1,5 +1,9 @@
+# overview
+![](../images/01-kube-apiserver-entry.png)
 # main
 *cmd/kube-apiserver/apiserver.go*
+
+this is the entry of kube-apisever which just simply generates server run command and execute it.
 
 ```go
 func main() {
@@ -17,8 +21,9 @@ func main() {
 	}
 }
 ```
-# start apiserver
+#Generate server command
 *cmd/kube-apiserver/app/server.go*
+##initialize default server options
 
 ```go
 // use cobra to generate CLI
@@ -36,6 +41,42 @@ func NewAPIServerCommand() *cobra.Command {
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())
 		},
 	}
+	...
+```
+basically there're three types of options
+
+* genericoptions(*apiserver/pkg/server/options*)
+	
+	all kube-apiserver options are defined here. details will be in another charpter
+* kubeoptions(*kubernetes/pkg/kubeapiserver/options*)
+
+	a wrapper of genericoptions
+* KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)
+	
+
+```go
+func NewServerRunOptions() *ServerRunOptions {
+	s := ServerRunOptions{
+		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
+		Etcd:                    genericoptions.NewEtcdOptions(storagebackend.NewDefaultConfig(kubeoptions.DefaultEtcdPathPrefix, nil)),
+		SecureServing:           kubeoptions.NewSecureServingOptions(),
+		InsecureServing:         kubeoptions.NewInsecureServingOptions(),
+		Audit:                   genericoptions.NewAuditOptions(),
+		Features:                genericoptions.NewFeatureOptions(),
+		...
+		KubeletConfig: kubeletclient.KubeletClientConfig{
+			...
+			}
+	s.ServiceClusterIPRange = kubeoptions.DefaultServiceIPCIDR
+
+	// Overwrite the default for storage data format.
+	s.Etcd.DefaultStorageMediaType = "application/vnd.kubernetes.protobuf"
+
+	return &s
+}
+```
+##overwirte with user input
+```go
 
 	fs := cmd.Flags()
 	namedFlagSets := s.Flags()
@@ -45,22 +86,12 @@ func NewAPIServerCommand() *cobra.Command {
 	for _, f := range namedFlagSets.FlagSets {
 		fs.AddFlagSet(f)
 	}
+	...
+```
+#Start kube-apiserver
+basically two steps here, create config and generate apiserver with that config.
 
-	usageFmt := "Usage:\n  %s\n"
-	cols, _, _ := term.TerminalSize(cmd.OutOrStdout())
-	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
-		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
-		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
-		return nil
-	})
-	cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
-		cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
-	})
-
-	return cmd
-}
-
+```go
 // Run starts apiserver and takes a channel as parameter,
 // it will stop apiserver when reciving stop signal.
 func Run(completeOptions completedServerRunOptions, stopCh <-chan struct{}) error {
@@ -74,8 +105,6 @@ func Run(completeOptions completedServerRunOptions, stopCh <-chan struct{}) erro
 // k8s.io/apiserver/pkg/server/genericapiserver.go.
 // GenericAPIServer represents a running apiserver which contains state. 
 func CreateServerChain(completedOptions completedServerRunOptions, stopCh <-chan struct{}) (*genericapiserver.GenericAPIServer, error) {
-	// SSH tunnels are currently deprecated 
-	nodeTunneler, proxyTransport, err := CreateNodeDialer(completedOptions)
 	...
 	// generate apiserver configuration
 	kubeAPIServerConfig, insecureServingInfo, serviceResolver, pluginInitializer, admissionPostStartHook, err := CreateKubeAPIServerConfig(completedOptions, nodeTunneler, proxyTransport)
@@ -85,7 +114,17 @@ func CreateServerChain(completedOptions completedServerRunOptions, stopCh <-chan
 	...
 	return aggregatorServer.GenericAPIServer, nil
 }
+```
+##create Kube-apiserver config
+* generate generic apiserver config
+* set api resource config 
+* set stoarge config
+* check etcd connetivity
+* etc.
 
+evntually it will create a master api config
+
+```go
 func CreateKubeAPIServerConfig(
 	s completedServerRunOptions,
 	nodeTunneler tunneler.Tunneler,
@@ -132,4 +171,81 @@ func CreateKubeAPIServerConfig(
 	return
 }
 
+```
+##create kube-apiserver
+it simply call master complete and new function to generate a mster object which represents a kube-apiserver.
+
+```go
+func CreateKubeAPIServer(kubeAPIServerConfig *master.Config, delegateAPIServer genericapiserver.DelegationTarget, admissionPostStartHook genericapiserver.PostStartHookFunc) (*master.Master, error) {
+	kubeAPIServer, err := kubeAPIServerConfig.Complete().New(delegateAPIServer)
+	if err != nil {
+		return nil, err
+	}
+
+	kubeAPIServer.GenericAPIServer.AddPostStartHookOrDie("start-kube-apiserver-admission-initializer", admissionPostStartHook)
+
+	return kubeAPIServer, nil
+}
+```
+also generate extension server based on kube-apiserver config if there's any
+
+```go
+// If additional API servers are added, they should be gated.
+	apiExtensionsConfig, err := createAPIExtensionsConfig(*kubeAPIServerConfig.GenericConfig, kubeAPIServerConfig.ExtraConfig.VersionedInformers, pluginInitializer, completedOptions.ServerRunOptions, completedOptions.MasterCount,
+		serviceResolver, webhook.NewDefaultAuthenticationInfoResolverWrapper(proxyTransport, kubeAPIServerConfig.GenericConfig.LoopbackClientConfig))
+	if err != nil {
+		return nil, err
+	}
+	apiExtensionsServer, err := createAPIExtensionsServer(apiExtensionsConfig, genericapiserver.NewEmptyDelegate())
+	...
+```
+##start api server
+1. call generic apiserver prerun to register api resouce which invokes master setup.
+2. call run to start generic apiserver 
+
+
+```go
+func (s *GenericAPIServer) PrepareRun() preparedGenericAPIServer {
+	if s.openAPIConfig != nil {
+		s.OpenAPIVersionedService, s.StaticOpenAPISpec = routes.OpenAPI{
+			Config: s.openAPIConfig,
+		}.Install(s.Handler.GoRestfulContainer, s.Handler.NonGoRestfulMux)
+	}
+
+	s.installHealthz()
+
+	// Register audit backend preShutdownHook.
+	if s.AuditBackend != nil {
+		err := s.AddPreShutdownHook("audit-backend", func() error {
+			s.AuditBackend.Shutdown()
+			return nil
+		})
+		if err != nil {
+			klog.Errorf("Failed to add pre-shutdown hook for audit-backend %s", err)
+		}
+	}
+
+	return preparedGenericAPIServer{s}
+}
+
+// Run spawns the secure http server. It only returns if stopCh is closed
+// or the secure port cannot be listened on initially.
+func (s preparedGenericAPIServer) Run(stopCh <-chan struct{}) error {
+	err := s.NonBlockingRun(stopCh)
+	if err != nil {
+		return err
+	}
+
+	<-stopCh
+
+	err = s.RunPreShutdownHooks()
+	if err != nil {
+		return err
+	}
+
+	// Wait for all requests to finish, which are bounded by the RequestTimeout variable.
+	s.HandlerChainWaitGroup.Wait()
+
+	return nil
+}
 ```
