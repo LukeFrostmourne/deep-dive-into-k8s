@@ -1,6 +1,12 @@
-# overview
+# Table of contents
+1. [overview](#overview)
+2. [main](#main-function)
+3. [generate server command](#generate-server-command)
+4. [run apiserver server](#run-kube-apiserver)
+
+# Overview
 ![](../images/01-kube-apiserver-entry.png)
-# main
+# Main function
 *cmd/kube-apiserver/apiserver.go*
 
 this is the entry of kube-apisever which just simply generates server run command and execute it.
@@ -85,7 +91,7 @@ func NewServerRunOptions() *ServerRunOptions {
 	}
 	...
 ```
-# Start kube-apiserver
+# Run kube-apiserver
 basically two steps here, create config and generate apiserver with that config.
 
 ```go
@@ -197,7 +203,6 @@ also generate extension server based on kube-apiserver config if there's any
 	apiExtensionsServer, err := createAPIExtensionsServer(apiExtensionsConfig, genericapiserver.NewEmptyDelegate())
 	...
 ```
-
 ## start api server
 1. call generic apiserver prerun to register api resouce which invokes master setup.
 2. call run to start generic apiserver 
