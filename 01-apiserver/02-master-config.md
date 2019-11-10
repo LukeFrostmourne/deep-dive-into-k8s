@@ -229,14 +229,53 @@ func buildGenericConfig(
 	proxyTransport *http.Transport,
 ) (...) {
 	genericConfig = genericapiserver.NewConfig(legacyscheme.Codecs)
-	// set default enabled api resources
 	genericConfig.MergedResourceConfig = master.DefaultAPIResourceConfigSource()
 
+	// set server run options
 	if lastErr = s.GenericServerRunOptions.ApplyTo(genericConfig); lastErr != nil {
 		return
 	}
+		
+	// set certifcates for https server
+	if lastErr = s.Authentication.ApplyTo(genericConfig); lastErr != nil {
+		return
+	}
+	
 	...
-	return
+	
+
+	// set openapi config which is defined in kubernetes/pkg/generated/openapi/zz_generated.openapi.go
+	genericConfig.OpenAPIConfig = genericapiserver.DefaultOpenAPIConfig(generatedopenapi.GetOpenAPIDefinitions, openapinamer.NewDefinitionNamer(legacyscheme.Scheme, extensionsapiserver.Scheme, aggregatorscheme.Scheme))
+	genericConfig.OpenAPIConfig.Info.Title = "Kubernetes"
+	
+	// set long running functions
+	genericConfig.LongRunningFunc = filters.BasicLongRunningRequestCheck(
+		sets.NewString("watch", "proxy"),
+		sets.NewString("attach", "exec", "proxy", "log", "portforward"),
+	)
+
+	kubeVersion := version.Get()
+	genericConfig.Version = &kubeVersion
+
+	// create storageFactoryConfig
+	storageFactoryConfig := kubeapiserver.NewStorageFactoryConfig()
+	storageFactoryConfig.ApiResourceConfig = genericConfig.MergedResourceConfig
+	completedStorageFactoryConfig, err := storageFactoryConfig.Complete(s.Etcd)
+	if err != nil {
+		lastErr = err
+		return
+	}
+	storageFactory, lastErr = completedStorageFactoryConfig.New()
+	if lastErr != nil {
+		return
+	}
+	
+	// set RESTOptionsGetter
+	if lastErr = s.Etcd.ApplyWithStorageFactoryTo(storageFactory, genericConfig); lastErr != nil {
+		return
+	}
+	
+	...
 }
 ```
 
