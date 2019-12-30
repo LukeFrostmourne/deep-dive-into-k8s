@@ -8,7 +8,9 @@
 
 
 # Overview
+
 `InstallLegacyAPI` and `InstallAPIs` are used to register api.
+![](../images/03-kube-apiserver-registry.png)
 
 ```go
 func (c completedConfig) New(delegationTarget genericapiserver.DelegationTarget) (*Master, error) {
@@ -924,3 +926,40 @@ func (c *Controller) Stop() {
 ```
 
 # InstallAPIs
+it will register other apis except for core. (kubernetes/pkg/registry)
+it's basically same with core API registry.
+
+```go
+// InstallAPIs will install the APIs for the restStorageProviders if they are enabled.
+func (m *Master) InstallAPIs(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter, restStorageProviders ...RESTStorageProvider) {
+	apiGroupsInfo := []*genericapiserver.APIGroupInfo{}
+
+	for _, restStorageBuilder := range restStorageProviders {
+		groupName := restStorageBuilder.GroupName()
+		if !apiResourceConfigSource.AnyVersionForGroupEnabled(groupName) {
+			klog.V(1).Infof("Skipping disabled API group %q.", groupName)
+			continue
+		}
+		apiGroupInfo, enabled := restStorageBuilder.NewRESTStorage(apiResourceConfigSource, restOptionsGetter)
+		if !enabled {
+			klog.Warningf("Problem initializing API group %q, skipping.", groupName)
+			continue
+		}
+		klog.V(1).Infof("Enabling API group %q.", groupName)
+
+		if postHookProvider, ok := restStorageBuilder.(genericapiserver.PostStartHookProvider); ok {
+			name, hook, err := postHookProvider.PostStartHook()
+			if err != nil {
+				klog.Fatalf("Error building PostStartHook: %v", err)
+			}
+			m.GenericAPIServer.AddPostStartHookOrDie(name, hook)
+		}
+
+		apiGroupsInfo = append(apiGroupsInfo, &apiGroupInfo)
+	}
+
+	if err := m.GenericAPIServer.InstallAPIGroups(apiGroupsInfo...); err != nil {
+		klog.Fatalf("Error in registering group versions: %v", err)
+	}
+}
+```
