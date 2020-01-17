@@ -217,7 +217,7 @@ func DefaultBuildHandlerChain(apiHandler http.Handler, c *Config) http.Handler {
 }
 ```
 
-## Overwirte wit user input
+## Overwirte with user input
 
 *kubernetes/cmd/kube-apiserver/app/server.go*
 

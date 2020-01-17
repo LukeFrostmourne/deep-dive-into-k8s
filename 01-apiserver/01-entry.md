@@ -49,12 +49,14 @@ func NewAPIServerCommand() *cobra.Command {
 	...
 ```
 basically there're three types of options
-* genericoptions(*apiserver/pkg/server/options*)	
+
+* genericoptions(*apiserver/pkg/server/options*)
+
+  all kube-apiserver options are defined here. details will be in another charpter
 	
-	all kube-apiserver options are defined here. details will be in another charpter
 * kubeoptions(*kubernetes/pkg/kubeapiserver/options*)
 	
-	a wrapper of genericoptions
+  a wrapper of genericoptions
 * KubeletClientConfig(*kubernetes/pkg/kubelet/client/kubelet_client.go*)
 
 ```go
@@ -66,10 +68,36 @@ func NewServerRunOptions() *ServerRunOptions {
 		InsecureServing:         kubeoptions.NewInsecureServingOptions(),
 		Audit:                   genericoptions.NewAuditOptions(),
 		Features:                genericoptions.NewFeatureOptions(),
-		...
+		Admission:               kubeoptions.NewAdmissionOptions(),
+		Authentication:          kubeoptions.NewBuiltInAuthenticationOptions().WithAll(),
+		Authorization:           kubeoptions.NewBuiltInAuthorizationOptions(),
+		CloudProvider:           kubeoptions.NewCloudProviderOptions(),
+		APIEnablement:           genericoptions.NewAPIEnablementOptions(),
+
+		EnableLogsHandler:      true,
+		EventTTL:               1 * time.Hour,
+		MasterCount:            1,
+		EndpointReconcilerType: string(reconcilers.LeaseEndpointReconcilerType),
 		KubeletConfig: kubeletclient.KubeletClientConfig{
-			...
-			}
+			Port:         ports.KubeletPort,
+			ReadOnlyPort: ports.KubeletReadOnlyPort,
+			PreferredAddressTypes: []string{
+				// --override-hostname
+				string(api.NodeHostName),
+
+				// internal, preferring DNS if reported
+				string(api.NodeInternalDNS),
+				string(api.NodeInternalIP),
+
+				// external, preferring DNS if reported
+				string(api.NodeExternalDNS),
+				string(api.NodeExternalIP),
+			},
+			EnableHttps: true,
+			HTTPTimeout: time.Duration(5) * time.Second,
+		},
+		ServiceNodePortRange: kubeoptions.DefaultServiceNodePortRange,
+	}
 	s.ServiceClusterIPRange = kubeoptions.DefaultServiceIPCIDR
 
 	// Overwrite the default for storage data format.
