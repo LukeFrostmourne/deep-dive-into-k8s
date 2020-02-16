@@ -1,7 +1,13 @@
 # Table of contents
 1. [overview](#overview)
 2. [read handler](#read-handler)
+   * [rest.Storage](#rest.Storage)
+   * [Storage.Interface](#Storage.Interface)
+   * [functions](#StoreOptions)
+   * [Conclusion](#Conclusion)
 3. [write handler](#write-handler)
+   * [Admission Control](#Admission-Control)
+   * [functions](#No-Cache)
 
 
 
