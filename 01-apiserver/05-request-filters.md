@@ -1,7 +1,15 @@
 # Table of contents
 1. [overview](#overview)
 2. [authentication](#authentication)
+   * [WithAuthentication](#WithAuthentication)
+   * [Authenticator Initialization](#Authenticator-Initialization)
+   * [Authenctication Configuration](#Authenctication-Configuration)
+   * [Add Authenticators](#Add-Authenticators)
 3. [authorization](#auhtorization)
+   * [WithAuthorization](#WithAuthorization)
+   * [Authorizer Initialization](#Authorizer-Initialization)
+   * [Authorization Configuration](#Authorization-Configuration)
+   * [Add Authorizers](#Add-Authorizers)
 
 
 # Overview
