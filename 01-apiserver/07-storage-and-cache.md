@@ -1,7 +1,18 @@
 # Table of contents
-1. [overview](#overview)
+1. [Overview](#overview)
 2. [UndecoratedStorage](#UndecoratedStorage)
    * [Get](#Get)
+   * [Create](#Create)
+   * [Watch](#Watch)
+3. [StorageWithCacher](#StorageWithCacher)
+   * [Initialization](#NewCacherFromConfig)
+     * [Cacher](#Cacher)
+     * [Reflector](#Reflector)
+     * [startCaching](#startCaching)
+     * [dispatchEvents](#dispatchEvents)
+   * [Functions](#functions)
+     * [Get](#Get)
+     * [Watch](#Watch)
 
 
 
