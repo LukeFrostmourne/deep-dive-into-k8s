@@ -17,6 +17,8 @@ user request is handled by filters before resource handler.
 recall from **03-master-startup**(`initialize generic server`).
 filter handlers are added to handler chain.
 
+![](../images/04-kube-apiserver-filters.png)
+
 ```go
 func (c completedConfig) New(name string, delegationTarget DelegationTarget) (*GenericAPIServer, error) {
 	...
