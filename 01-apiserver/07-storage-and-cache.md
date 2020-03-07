@@ -19,6 +19,8 @@
 # Overview
 recall from **06-request-handlers**, there're storage type: `UndecoratedStorage` and `StorageWithCache`
 
+![](../images/06-kube-apiserver-storage.png)
+
 # UndecoratedStorage
 it basically is a [etcdv3 client](https://github.com/etcd-io/etcd/tree/master/clientv3)
 

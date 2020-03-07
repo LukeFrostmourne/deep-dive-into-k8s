@@ -12,10 +12,13 @@
 
 
 # Overview
+
 resource handler will take over after filters.
+![](../images/05-kube-apiserver-handlers.png)
 recall from **04-api-registry**.
 
-`kubernetes/staging/src/k8s.io/apiserver/pkg/endpoints/installer.go`
+*kubernetes/staging/src/k8s.io/apiserver/pkg/endpoints/installer.go*
+
 
 ```go
 
@@ -138,7 +141,7 @@ func (c LegacyRESTStorageProvider) NewLegacyRESTStorage(restOptionsGetter generi
 
 ```
 
-* Namesapce RESTStorage contains a `genericregistry.Store` object which is the interface of etcd.
+* Namesapce RESTStorage contains a `genericregistry.Store` object which is the interface to operate storage.
 
   *kubernetes/pkg/registry/core/namespace/storage/storage.go*
 
