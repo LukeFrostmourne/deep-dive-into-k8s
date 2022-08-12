@@ -6,6 +6,30 @@
 
 Basically I’ll cover all the components in this graph.
 
+
+- [Controller](#controller)
+- [Reflector](#reflector)
+  - [Initialization](#initialization)
+  - [ListAndWatch](#listandwatch)
+- [DeltaFIFO](#deltafifo)
+  - [Initialization](#initialization)
+  - [Concepts](#concepts)
+  - [Store functions](#store-functions)
+  - [FIFO functions](#fifo-functions)
+  - [Architecture](#architecture)
+- [Informer](#informer)
+  - [Indexer](#indexer)
+  - [Thread safe store](#thread-safe-store)
+  - [ResourceEventHandlers](#resourceeventhandlers)
+  - [Architecture](#architecture)
+- [Workqueue](#workqueue)
+  - [Initialization](#initialization)
+  - [Processing](#processing)
+  - [Retrying](#retrying)
+  - [Architecture](#architecture)
+- [Consumer](#consumer)
+- [Architecture](#architecture)
+
 # Controller
 
 > Controller is a low-level controller that is parameterized by a Config and used in sharedIndexInformer.
