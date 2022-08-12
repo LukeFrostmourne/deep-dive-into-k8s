@@ -374,7 +374,7 @@ for {
 
 ### Dataflow
 
-[https://whimsical.com/client-go-reflector-cache-4zddyH9nDzuPu8JB9ubRmA](https://whimsical.com/client-go-reflector-cache-4zddyH9nDzuPu8JB9ubRmA)
+![](../images/client-go-reflector-cache.png)
 
 # DeltaFIFO
 
