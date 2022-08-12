@@ -867,7 +867,7 @@ func NewThreadSafeStore(indexers Indexers, indices Indices) ThreadSafeStore {
 
 ### Architecture
 
-[https://whimsical.com/indexer-H4T5CZM7SfVgAdU7SyNHBW](https://whimsical.com/indexer-H4T5CZM7SfVgAdU7SyNHBW)
+![](../images/deltafifo-arch.png)
 
 ### Add/Update
 
