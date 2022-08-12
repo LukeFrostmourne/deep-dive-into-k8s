@@ -1311,8 +1311,7 @@ func (c *Controller) processNextItem() bool {
      return true
 }
 ```
-
-[https://whimsical.com/workqueue-add-EbDvUemF13E9LxecCCzHFf](https://whimsical.com/workqueue-add-EbDvUemF13E9LxecCCzHFf)
+![](../images/workqueue-add.png)
 
 ## Retrying
 
@@ -1374,7 +1373,7 @@ func newDelayingQueue(clock clock.WithTicker, q Interface, name string) *delayin
 
 `waitingForAddCh` stores keys(1000 at max) require retrying, these keys are handled in `[waitingLoop](https://github.com/kubernetes/client-go/blob/master/util/workqueue/delaying_queue.go#L189)` .
 
-[https://whimsical.com/workqueue-retrying-TcGEZMycRtZqUSo1P614yG](https://whimsical.com/workqueue-retrying-TcGEZMycRtZqUSo1P614yG)
+![](../images/workqueue-retrying.png)
 
 ### Reset delay
 
@@ -1404,7 +1403,7 @@ func (r *ItemExponentialFailureRateLimiter) Forget(item interface{}) {
 
 ## Architecture
 
-[https://whimsical.com/workqueue-arch-9UNfwG5sSc33Qo99fn25md](https://whimsical.com/workqueue-arch-9UNfwG5sSc33Qo99fn25md)
+![](../images/workqueue-arch.png)
 
 # Consumer
 
@@ -1431,4 +1430,5 @@ func (c *threadSafeMap) Get(key string) (item interface{}, exists bool) {
 
 # Architecture
 
-[https://whimsical.com/client-go-arch-65BF6bjBEkUgiEgY5cnYgX](https://whimsical.com/client-go-arch-65BF6bjBEkUgiEgY5cnYgX)
+![](../images/client-go-arch.png)
+
