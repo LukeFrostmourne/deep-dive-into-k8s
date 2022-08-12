@@ -219,10 +219,8 @@ func (r *Reflector) ListAndWatch(stopCh <-chan struct{}) error {
     > NOTE: It should be used carefully as paginated lists are always served directly from etcd, which is significantly less efficient and may lead to serious performance and scalability problems.
     > 
     
-    <aside>
-    💡  [k8s API](https://github.com/liFeixiang/deep-dive-into-k8s/blob/master/01-apiserver/07-storage-and-cache.md#StorageWithCacher)  is also using client-go cache, this warning is for k8s API server not controllers.
+    [k8s API](https://github.com/liFeixiang/deep-dive-into-k8s/blob/master/01-apiserver/07-storage-and-cache.md#StorageWithCacher)  is also using client-go cache, this warning is for k8s API server not controllers.
     
-    </aside>
     
 2. get list
     
