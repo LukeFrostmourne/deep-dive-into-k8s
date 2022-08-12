@@ -722,7 +722,7 @@ func (c *controller) processLoop() {
 }
 ```
 
-It pops object from DeltaFIFO and handle it by `[Process](https://github.com/kubernetes/client-go/blob/master/tools/cache/shared_informer.go#L566)`
+It pops object from DeltaFIFO and handle it by [Process](https://github.com/kubernetes/client-go/blob/master/tools/cache/shared_informer.go#L566)
 
 ```go
 func (s *sharedIndexInformer) Run(stopCh <-chan struct{}) {
@@ -746,7 +746,7 @@ func (s *sharedIndexInformer) HandleDeltas(obj interface{}) error {
 }
 ```
 
-`HandleDeltas` does locking and simple invokes `[processDeltas](https://github.com/kubernetes/client-go/blob/master/tools/cache/controller.go#L412)`
+`HandleDeltas` does locking and simple invokes [processDeltas](https://github.com/kubernetes/client-go/blob/master/tools/cache/controller.go#L412)
 
 ```go
 func processDeltas(
@@ -868,7 +868,7 @@ func NewThreadSafeStore(indexers Indexers, indices Indices) ThreadSafeStore {
 
 ### Architecture
 
-![](../images/deltafifo-arch.png)
+![](../images/indexer.png)
 
 ### Add/Update
 
@@ -1175,11 +1175,11 @@ func (p *sharedProcessor) distribute(obj interface{}, sync bool) {
 
 ### Architecture
 
-[https://whimsical.com/processor-HFvsXR4pRKgshFgkU5jgji](https://whimsical.com/processor-HFvsXR4pRKgshFgkU5jgji)
+![](../images/processor.png)
 
 ## Architecture
 
-[https://whimsical.com/informer-8TeTiUiJxagnb9C2RvKxiY](https://whimsical.com/informer-8TeTiUiJxagnb9C2RvKxiY)
+![](../images/informer.png)
 
 # Workqueue
 
