@@ -505,7 +505,7 @@ func (c *cache) GetByKey(key string) (item interface{}, exists bool, err error) 
 
 ### Add/Update/Delete
 
-These 3 functions are similar they all invoke a common function `[queueActionLocked](https://github.com/kubernetes/client-go/blob/master/tools/cache/delta_fifo.go#L409)` .
+These 3 functions are similar they all invoke a common function [queueActionLocked](https://github.com/kubernetes/client-go/blob/master/tools/cache/delta_fifo.go#L409) .
 
 ```go
 func (f *DeltaFIFO) queueActionLocked(actionType DeltaType, obj interface{}) error {
