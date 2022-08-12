@@ -786,7 +786,8 @@ for _, d := range deltas {
 - invoke the indexer
 - invoke the handler
 
-[https://whimsical.com/informer-arch-copy-XUT2HntaeoeKrxPsT9CVA](https://whimsical.com/informer-arch-copy-XUT2HntaeoeKrxPsT9CVA)
+
+![](../images/informer-arch.png)
 
 ## Indexer
 
