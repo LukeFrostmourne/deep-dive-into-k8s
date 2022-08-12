@@ -349,7 +349,7 @@ for {
     func(options meta_v1.ListOptions) (watch.Interface, error) {return client.CoreV1().Pods("default").Watch(options)}
     ```
     
-- `[watchHandler](https://github.com/kubernetes/client-go/blob/master/tools/cache/reflector.go#L460)` update data store based on the event type
+- [watchHandler](https://github.com/kubernetes/client-go/blob/master/tools/cache/reflector.go#L460) update data store based on the event type
     
     ```go
     for {
