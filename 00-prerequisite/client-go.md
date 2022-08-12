@@ -419,7 +419,7 @@ type DeltaFIFO struct {
 }
 ```
 
-[https://whimsical.com/deltafifo-component-2LTnFyHLBMuGQnGg7vVb7m](https://whimsical.com/deltafifo-component-2LTnFyHLBMuGQnGg7vVb7m)
+![](../images/deltafifo-component.png)
 
 ### Delta
 
