@@ -697,7 +697,7 @@ func (f *DeltaFIFO) addIfNotPresent(id string, deltas Deltas) {
 }
 ```
 
-## Architecture
+## FIFO Architecture
 
 ![](../images/deltafifo-arch.png)
 
