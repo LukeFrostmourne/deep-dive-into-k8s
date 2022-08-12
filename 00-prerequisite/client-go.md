@@ -2,8 +2,7 @@
 
 [client-go](https://github.com/kubernetes/client-go) is a golang package to talk to a k8s cluster. I will deep dive into source code to explain how client-go works in k8s controllers.
 
-Basically I’ll cover all the components in this graph.
-[sample-controller](https://github.com/kubernetes/sample-controller/blob/master/docs/controller-client-go.md)
+Basically I’ll cover all the components in [this graph](https://github.com/kubernetes/sample-controller/blob/master/docs/controller-client-go.md)
 
 - [Controller](#controller)
 - [Reflector](#reflector)
