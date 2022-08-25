@@ -37,7 +37,7 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     
     It isolates PID numbers, the first process gets the PID 1 inside the namespace.
     
-    [https://whimsical.com/pid-namspace-Ljan1McuMUBbSjG7qjA6BE](https://whimsical.com/pid-namspace-Ljan1McuMUBbSjG7qjA6BE)
+    ![](../images/pid-namespace.png)
     
     `lsns` will show all the namespaces.
     
@@ -136,8 +136,7 @@ see usage [here](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/cg
 💡 runc is just a CLI, there’s no daemon process to monitor runc containers
 
 </aside>
-
-[https://whimsical.com/runc-GqVVEoh11HmfhaZF4phTQv](https://whimsical.com/runc-GqVVEoh11HmfhaZF4phTQv)
+![](../images/runc.png)
 
 ### How it works
 
@@ -242,7 +241,7 @@ with runc we can run, stop, xx containers, but we need a tool(container manger) 
 
 containers can be long running but container manager itself (containerd) may need to restart, update or just crash due to some reasons.  We don’t want to kill or lose control of managed containers when it happens, but runc is just a CLI.  shim is to solve this problem.
 
-[https://whimsical.com/shim-WyvravKKfp4r6qU6jh4Wav](https://whimsical.com/shim-WyvravKKfp4r6qU6jh4Wav)
+![](../images/shim.png)
 
 On the host it’s easy to see in process tree
 
@@ -269,4 +268,4 @@ docker uses containerd internally but it doesn’t implement CRI. Kubernetes use
 
 # Summary
 
-[https://whimsical.com/cri-v2-XUZ5f1wUjrNhND2ieCC4PT](https://whimsical.com/cri-v2-XUZ5f1wUjrNhND2ieCC4PT)
+![](../images/CRI-v2.png)
