@@ -1,14 +1,22 @@
 # Overview
 kubelet is using a concept called CRI (Container Runtime Interface) for interacting with concrete container runtimes. Simply speaking, CRI provides an abstraction between kubelet and a specific runtime implementation.
 
-
+![](../images/CRI.png)
 
 Let’s start with some concepts.
 
 - [Concepts](#concepts)
-  - [Container](#container)
-  - [OCI](#oci)
-  - [CRI](#cri)
+  * [Container](#container)
+    + [what is container?](#what-is-container-)
+    + [namespaces](#namespaces)
+    + [cgroups](#cgroups)
+  * [OCI](#oci)
+    + [How it works](#how-it-works)
+    + [runc container](#runc-container)
+  * [CRI](#cri)
+    + [containerd](#containerd)
+    + [shim](#shim)
+    + [docker](#docker)
 - [Summary](#summary)
 
 # Concepts
