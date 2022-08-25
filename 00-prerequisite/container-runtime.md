@@ -34,9 +34,7 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
 [nsenter](https://man7.org/linux/man-pages/man1/nsenter.1.html) can be used to enter a namespace.
 
 - PID namespace
-    
     It isolates PID numbers, the first process gets the PID 1 inside the namespace.
-    
     ![](../images/pid-namespace.png)
     
     `lsns` will show all the namespaces.
@@ -75,7 +73,6 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     
     It isolates the mount points,  each mount namespace has an independent list of mount points inside.
     
-    learn more [Container Filesystem](https://www.notion.so/Container-Filesystem-526fdaaf057f43feab4b38b53f3ab02e).
     
 - Network namespace
     
