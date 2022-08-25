@@ -63,11 +63,9 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     PID   USER     TIME  COMMAND
         1 root     13d14 /bin/cortex -target=ingester -config.file=/etc/cortex/cortex.yaml -blocks-storage.bucket-store.index-cache.backend=memcached -blocks-storage.bucket-store.index-cache.memcached.addresses=dns+cortex-memcached-blocks-
     ```
+
+    💡 need to use `-m`  option , because the `ps` command works by reading files in the [proc filesystem](https://en.wikipedia.org/wiki/Procfs#Linux).
     
-    <aside>
-    💡 need to use `-m`  option , because the `ps` command works by reading files in the [proc filesystem] (https://en.wikipedia.org/wiki/Procfs#Linux).
-    
-    </aside>
     
 - Mount namespace
     
@@ -129,10 +127,8 @@ see usage [here](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/cg
 
  [runc](https://github.com/opencontainers/runc) is one of the implementations which wraps `libcontainer` (made by Docker to access kernel).
 
-<aside>
 💡 runc is just a CLI, there’s no daemon process to monitor runc containers
 
-</aside>
 ![](../images/runc.png)
 
 ### How it works
