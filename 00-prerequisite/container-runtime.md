@@ -7,7 +7,7 @@ Let’s start with some concepts.
 
 - [Concepts](#concepts)
   * [Container](#container)
-    + [what is container?](#what-is-container-)
+    + [what is container?](#what-is-container)
     + [namespaces](#namespaces)
     + [cgroups](#cgroups)
   * [OCI](#oci)
@@ -23,7 +23,7 @@ Let’s start with some concepts.
 
 ## Container
 
-### what is container?
+### what is container
 
 Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated process which are called container.
 
@@ -65,7 +65,7 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     ```
     
     <aside>
-    💡 need to use `-m`  option , because the `ps` command works by reading files in the [proc filesystem](https://en.wikipedia.org/wiki/Procfs#Linux).
+    💡 need to use `-m`  option , because the `ps` command works by reading files in the [proc filesystem] (https://en.wikipedia.org/wiki/Procfs#Linux).
     
     </aside>
     
