@@ -51,7 +51,6 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     ```bash
     # docker ps|grep cortex
     ebf6d4c42819        quay.io/cortexproject/cortex                                                                       "/bin/cortex -target…"   6 days ago          Up 6 days                               k8s_ingester_cortex-ingester-4_monitoring_e36c16a9-b290-4e88-8a9f-1c7ba2f22b14_0
-    f1946287cf7e        602401143452.dkr.ecr.ap-northeast-1.amazonaws.com/eks/pause:3.1-eksbuild.1                         "/pause"                 6 days ago          Up 6 days                               k8s_POD_cortex-ingester-4_monitoring_e36c16a9-b290-4e88-8a9f-1c7ba2f22b14_0
     # docker inspect ebf6d4c42819 --format {{.State.Pid}}
     25961
     ```
