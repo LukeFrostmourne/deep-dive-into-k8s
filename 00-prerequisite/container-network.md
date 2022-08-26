@@ -209,13 +209,13 @@ CRI plugin invokes CNI plugin to setup network.
     ```yaml
     initContainers:
     - name: aws-vpc-cni-init
-      image: "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon-k8s-cni-init:v1.9.3"
+      image: "xxxx/amazon-k8s-cni-init:v1.9.3"
     ```
     
     CRI will run the CNI plugin in binary directory.
     
     ```bash
-    [root@ip-10-0-75-41 ec2-user]# ls /opt/cni/bin/
+    # ls /opt/cni/bin/
     aws-cni  aws-cni-support.sh  bandwidth  bridge  dhcp  firewall  flannel  host-device  host-local  ipvlan  loopback  macvlan  portmap  ptp  sbr  static  tuning  vlan
     ```
     
