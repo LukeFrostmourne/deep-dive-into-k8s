@@ -49,17 +49,17 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     cortex is a docker container.
     
     ```bash
-    [root@ip-10-0-249-28 ec2-user]# docker ps|grep cortex
+    # docker ps|grep cortex
     ebf6d4c42819        quay.io/cortexproject/cortex                                                                       "/bin/cortex -target…"   6 days ago          Up 6 days                               k8s_ingester_cortex-ingester-4_monitoring_e36c16a9-b290-4e88-8a9f-1c7ba2f22b14_0
     f1946287cf7e        602401143452.dkr.ecr.ap-northeast-1.amazonaws.com/eks/pause:3.1-eksbuild.1                         "/pause"                 6 days ago          Up 6 days                               k8s_POD_cortex-ingester-4_monitoring_e36c16a9-b290-4e88-8a9f-1c7ba2f22b14_0
-    [root@ip-10-0-249-28 ec2-user]# docker inspect ebf6d4c42819 --format {{.State.Pid}}
+    # docker inspect ebf6d4c42819 --format {{.State.Pid}}
     25961
     ```
     
     Inside the namespace, we can see its PID is 1.
     
     ```bash
-    [root@ip-10-0-249-28 ec2-user]# nsenter -n -m -t 25961 ps -ef
+    # nsenter -n -m -t 25961 ps -ef
     PID   USER     TIME  COMMAND
         1 root     13d14 /bin/cortex -target=ingester -config.file=/etc/cortex/cortex.yaml -blocks-storage.bucket-store.index-cache.backend=memcached -blocks-storage.bucket-store.index-cache.memcached.addresses=dns+cortex-memcached-blocks-
     ```
@@ -86,7 +86,7 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
     
     ```bash
     # we can only see network resource of this container
-    [root@ip-10-0-249-28 ec2-user]# nsenter -n -m -t 25961 ip a
+    # nsenter -n -m -t 25961 ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
         inet 127.0.0.1/8 scope host lo
@@ -95,7 +95,7 @@ Linux kernel provides features(like `namespaces` , `cgroups`) to create isolated
         link/ether 26:50:e0:ec:a3:f8 brd ff:ff:ff:ff:ff:ff
         inet 10.0.252.107/32 scope global eth0
            valid_lft forever preferred_lft forever
-    [root@ip-10-0-249-28 ec2-user]# nsenter -n -m -t 25961 ip r
+    # nsenter -n -m -t 25961 ip r
     default via 169.254.1.1 dev eth0
     169.254.1.1 dev eth0 scope link
     ```
@@ -113,7 +113,7 @@ It limits, accounts for, and isolates the resource usage (CPU, memory, disk I/O,
 
 ```bash
 # cgroups settings
-[root@ip-10-0-249-28 ec2-user]# ls /sys/fs/cgroup/
+# ls /sys/fs/cgroup/
 blkio  cpu  cpu,cpuacct  cpuacct  cpuset  devices  freezer  hugetlb  memory  net_cls  net_cls,net_prio  net_prio  perf_event  pids  systemd
 ```
 
