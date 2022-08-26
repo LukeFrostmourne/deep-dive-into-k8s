@@ -2,7 +2,8 @@
 
 With [CRI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-prerequisite/container-runtime.md) kubelet is able to manage containers, as for networking CRI delegates the task to [CNI](https://github.com/containernetworking/cni)(Container Network Interface). Similar to CRI, CNI is also an abstraction which allows different network providers to use different networking implementations for containers.
 
-[https://whimsical.com/cni-NkSHgsUVt7w3WnT6K2K8tN](https://whimsical.com/cni-NkSHgsUVt7w3WnT6K2K8tN)
+![](../images/CNI.png)
+
 
 - [Overview](#overview)
 - [Concept](#concept)
@@ -26,20 +27,11 @@ With [CRI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-
 ## containers on the same host
 
 like servers in real world, we need 3 things to connect them:
+- NIC
+- cable
+- switch
 
-![NIC](CNI%20dcb54976ba57477ab5bd17c1003f3348/Untitled.png)
-
-NIC
-
-![cable](CNI%20dcb54976ba57477ab5bd17c1003f3348/Untitled%201.png)
-
-cable
-
-![switch](CNI%20dcb54976ba57477ab5bd17c1003f3348/Untitled%202.png)
-
-switch
-
-As mentioned in  [CRI](https://www.notion.so/CRI-36cbd031e1974afebce1d96b9a05d06f),  containers are just processes with namespaces, connecting containers means connecting network namespaces.
+As mentioned in  [CRI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-prerequisite/container-runtime.md),  containers are just processes with namespaces, connecting containers means connecting network namespaces.
 
 ### [veth](https://man7.org/linux/man-pages/man4/veth.4.html)
 
@@ -62,7 +54,7 @@ Linux provides a feature to create virtual ethernet devices,
 
 do the same thing for other containers, then we will have:
 
-[https://whimsical.com/veth-WazjyBAqDYowH4Mfu5C8PJ](https://whimsical.com/veth-WazjyBAqDYowH4Mfu5C8PJ)
+![](../images/veth.png)
 
 ### [Linux bridge](https://wiki.archlinux.org/title/Network_bridge)
 
