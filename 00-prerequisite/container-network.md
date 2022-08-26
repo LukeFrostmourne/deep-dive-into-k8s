@@ -1,6 +1,6 @@
 # Overview
 
-With [CRI](https://www.notion.so/CRI-36cbd031e1974afebce1d96b9a05d06f) kubelet is able to manage containers, as for networking CRI delegates the task to [CNI](https://github.com/containernetworking/cni)(Container Network Interface). Similar to CRI, CNI is also an abstraction which allows different network providers to use different networking implementations for containers.
+With [CRI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-prerequisite/container-runtime.md) kubelet is able to manage containers, as for networking CRI delegates the task to [CNI](https://github.com/containernetworking/cni)(Container Network Interface). Similar to CRI, CNI is also an abstraction which allows different network providers to use different networking implementations for containers.
 
 [https://whimsical.com/cni-NkSHgsUVt7w3WnT6K2K8tN](https://whimsical.com/cni-NkSHgsUVt7w3WnT6K2K8tN)
 
@@ -8,8 +8,8 @@ With [CRI](https://www.notion.so/CRI-36cbd031e1974afebce1d96b9a05d06f) kubelet i
 - [Concept](#concept)
   * [k8s network model](#k8s-network-model)
   * [containers on the same host](#containers-on-the-same-host)
-    + [[veth](https://man7.org/linux/man-pages/man4/veth.4.html)](#-veth--https---man7org-linux-man-pages-man4-veth4html-)
-    + [[Linux bridge](https://wiki.archlinux.org/title/Network_bridge)](#-linux-bridge--https---wikiarchlinuxorg-title-network-bridge-)
+    + [[veth](https://man7.org/linux/man-pages/man4/veth.4.html)](
+    + [[Linux bridge](https://wiki.archlinux.org/title/Network_bridge)]
   * [containers on different hosts](#containers-on-different-hosts)
 - [Pod creation](#pod-creation)
   * [start procedure](#start-procedure)
