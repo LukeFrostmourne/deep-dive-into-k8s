@@ -166,10 +166,8 @@ src IP: 172.0.10.2 → dst IP: 172.0.11.2
 3. call CNI to [setup network](https://github.com/containerd/containerd/blob/main/pkg/cri/server/sandbox_run.go#L165).
 4. call OCI(runc) to [start sandbox container](https://github.com/containerd/containerd/blob/main/pkg/cri/server/sandbox_run.go#L327). 
 5. pull images
-    
-    [kubernetes/kuberuntime_container.go at master · kubernetes/kubernetes](https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/kuberuntime/kuberuntime_container.go#L177)
-    
-    [containerd/image_pull.go at main · containerd/containerd](https://github.com/containerd/containerd/blob/main/pkg/cri/server/image_pull.go#L92)
+   - [kubelet](https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/kuberuntime/kuberuntime_container.go#L177)
+   - [containerd](https://github.com/containerd/containerd/blob/main/pkg/cri/server/image_pull.go#L92)
     
 6. call OCI to [start containers](https://github.com/containerd/containerd/blob/main/pkg/cri/server/container_start.go#L42)
 
@@ -224,7 +222,7 @@ CRI plugin invokes CNI plugin to setup network.
 
 # CNI plugins
 
-- AWS-CNI 
+- AWS-CNI (TODO)
 
 - Flanel
 
