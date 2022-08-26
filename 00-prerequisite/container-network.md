@@ -9,8 +9,6 @@ With [CRI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-
 - [Concept](#concept)
   * [k8s network model](#k8s-network-model)
   * [containers on the same host](#containers-on-the-same-host)
-    + [[veth](https://man7.org/linux/man-pages/man4/veth.4.html)](
-    + [[Linux bridge](https://wiki.archlinux.org/title/Network_bridge)]
   * [containers on different hosts](#containers-on-different-hosts)
 - [Pod creation](#pod-creation)
   * [start procedure](#start-procedure)
@@ -74,11 +72,10 @@ Linux provides a feature to create virtual L2 switch.
     ip link set veth0 master cni0
     ip link set veth2 master cni0
     ```
-    
 
 Now containers are connected by this bridge
 
-[https://whimsical.com/bridge-SHqXm1Vxg9iSVn2if9V6X2](https://whimsical.com/bridge-SHqXm1Vxg9iSVn2if9V6X2)
+![](../images/bridge.png)
 
 [*how it works*](https://docs.google.com/presentation/d/1NDoV7xa9gM2llAwnfCpGj6dF5klbyy4akgq_2ul9NLA/edit#slide=id.g489fb6edd3_0_350)
 
@@ -88,7 +85,7 @@ There are many ways(vxlan, iptables etc.) to communicate with containers on othe
 
 Use [VXLAN](https://en.wikipedia.org/wiki/Virtual_Extensible_LAN) (virtual L2 network over L3 network, it encapsulates L2 frames with L3 packets) as an example.
 
-[https://whimsical.com/vxlan-VooFQiWeyw1FUTZ6PzfTG5](https://whimsical.com/vxlan-VooFQiWeyw1FUTZ6PzfTG5)
+![](../images/vxlan.png)
 
 src IP: 172.0.10.2 → dst IP: 172.0.11.2
 
@@ -156,7 +153,7 @@ src IP: 172.0.10.2 → dst IP: 172.0.11.2
 
 ## start procedure
 
-[https://whimsical.com/TgL8peTutRchr8v7CzutPB](https://whimsical.com/TgL8peTutRchr8v7CzutPB)
+![](../images/pod-startup.png)
 
 1. call CRI to create [PodSanbox](https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/kuberuntime/kuberuntime_manager.go#L806).
     
@@ -227,8 +224,8 @@ CRI plugin invokes CNI plugin to setup network.
 
 # CNI plugins
 
-[aws-cni](https://www.notion.so/aws-cni-ea3b9c86621344a5af1ca3d5698cd86e) 
+- AWS-CNI 
 
-Flanel
+- Flanel
 
-Cilium
+- Cilium
