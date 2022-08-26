@@ -47,8 +47,7 @@ Linux provides a feature to create virtual ethernet devices,
     ip link set veth1 netns $CONTAINER_PID
     ip addr add dev veth1 172.0.10.2/24
     ip link set veth1 up
-    ```
-    
+    ``` 
 
 do the same thing for other containers, then we will have:
 
@@ -180,7 +179,7 @@ CRI plugin invokes CNI plugin to setup network.
     it will lookup `/etc/cni/net.d/<config-file>` , for example (aws-cni)
     
     ```bash
-    [root@ip-10-0-75-41 ec2-user]# cat /etc/cni/net.d/10-aws.conflist
+    # cat /etc/cni/net.d/10-aws.conflist
     {
       "cniVersion": "0.3.1",
       "name": "aws-cni",
@@ -209,7 +208,7 @@ CRI plugin invokes CNI plugin to setup network.
     ```yaml
     initContainers:
     - name: aws-vpc-cni-init
-      image: "xxxx/amazon-k8s-cni-init:v1.9.3"
+      image: "xxxx/aws-cni-init:v1.9.3"
     ```
     
     CRI will run the CNI plugin in binary directory.
