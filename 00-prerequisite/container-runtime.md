@@ -251,13 +251,6 @@ root     25961  226  9.5 52092268 25018556 ?   Ssl  Dec22 22771:15  |   \_ /bin/
 
 docker uses containerd internally but it doesn’t implement CRI. Kubernetes uses a component called ***dockershim***, which allows it to support Docker.
 
-<aside>
-💡 From 1.20 dockershim is [deprecated](https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/), fortunately EKS supports containerd now we should apply this change when upgrading k8s.
-
-</aside>
-
-[Amazon EKS now supports Kubernetes 1.21 | Amazon Web Services](https://aws.amazon.com/blogs/containers/amazon-eks-1-21-released/)
-
 # Summary
 
 ![](../images/CRI-v2.png)
