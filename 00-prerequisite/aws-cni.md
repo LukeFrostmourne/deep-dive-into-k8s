@@ -1,7 +1,10 @@
-# aws-cni
+# aws-cni overview
 
+I'll explain how aws-cni setups the container network from sourcecode 
 
-[https://whimsical.com/network-setup-PTChpkg8uZfxTG9xKo6C3c](https://whimsical.com/network-setup-PTChpkg8uZfxTG9xKo6C3c)
+![](../images/aws-cni.png)
+
+# How it works
 
 ## containerd
 
@@ -571,9 +574,9 @@ func (c *IPAMContext) StartNodeIPPoolManager() {
             }
             ```
             
-            - if **`[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)`** is true
+            - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)  is true
                 
-                 target = `[WARM_PREFIX_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_prefix_target-v190)` *****  16  
+                 target = [WARM_PREFIX_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_prefix_target-v190)   16  
                 
                 ```go
                 func GetPrefixDelegationDefaults() (int, int, int) {
@@ -585,7 +588,7 @@ func (c *IPAMContext) StartNodeIPPoolManager() {
                 }
                 ```
                 
-            - if **`[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)`** is false
+            - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190) is false
                 
                 target = maxIPsPerENI * `[WARM_ENI_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_eni_target)`  
                 
@@ -633,7 +636,7 @@ func (c *IPAMContext) StartNodeIPPoolManager() {
                 
                 ```
                 
-                if `[WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target)` and `[MINIMUM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#minimum_ip_target-v160)` are both 0 (which is default value), 
+                if [WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target) and [MINIMUM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#minimum_ip_target-v160) are both 0 (which is default value), 
                 
                 ```go
                 func (c *IPAMContext) datastorePrefixTargetState() (short int, enabled bool) {
@@ -653,9 +656,9 @@ func (c *IPAMContext) StartNodeIPPoolManager() {
                 }
                 ```
                 
-                - if `[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)` ****is false, skip increasing
-                - if `[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)` ****is true,  return diff between `[WARM_PREFIX_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_prefix_target-v190)` ****and free prefixes
-                - if `[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)` ****is false
+                - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190) is false, skip increasing
+                - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190) is true,  return diff between [WARM_PREFIX_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_prefix_target-v190) and free prefixes
+                - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190) is false
                     
                     ```go
                     	stats := c.dataStore.GetIPStats(ipV4AddrFamily)
@@ -665,9 +668,9 @@ func (c *IPAMContext) StartNodeIPPoolManager() {
                     	short = max(short, c.minimumIPTarget-stats.TotalIPs)
                     ```
                     
-                    Initial pool size is the larger one of `[WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target)`  and `[MINIMUM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#minimum_ip_target-v160)` , `[WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target)` determines how many new to add when there’s no available IP in pool. 
+                    Initial pool size is the larger one of [WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target)  and [MINIMUM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#minimum_ip_target-v160) , [WARM_IP_TARGET](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#warm_ip_target) determines how many new to add when there’s no available IP in pool. 
                     
-                - if `[ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190)` ****is true
+                - if [ENABLE_PREFIX_DELEGATION](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md#enable_prefix_delegation-v190) is true
                     
                     ```go
                     if c.enablePrefixDelegation {
