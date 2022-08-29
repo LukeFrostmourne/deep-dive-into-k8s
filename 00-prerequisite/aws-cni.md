@@ -10,7 +10,7 @@ I'll explain how aws-cni setups the container network from sourcecode
 
 ### create network namespace
 
-[containerd/sandbox_run.go at main · containerd/containerd](https://github.com/containerd/containerd/blob/main/pkg/cri/server/sandbox_run.go#L127)
+[containerd](https://github.com/containerd/containerd/blob/main/pkg/cri/server/sandbox_run.go#L127)
 
 it’s using [unshare](https://github.com/containerd/containerd/blob/main/pkg/netns/netns_linux.go#L53) system call to create network namespace
 
