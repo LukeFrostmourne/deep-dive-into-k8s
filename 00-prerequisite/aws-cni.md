@@ -2,9 +2,21 @@
 
 I'll explain how aws-cni setups the container network from sourcecode 
 
-![](../images/aws-cni.png)
+- [How it works](#how-it-works)
+  * [containerd](#containerd)
+    + [create network namespace](#create-network-namespace)
+    + [get CNI plugin](#get-cni-plugin)
+    + [execute CNI plugin binary](#execute-cni-plugin-binary)
+  * [aws-cni](#aws-cni)
+    + [Elastic network interfaces](#elastic-network-interfaces)
+    + [aws-cni bin](#aws-cni-bin)
+    + [aws-node](#aws-node)
+- [Packet flow](#packet-flow)
+
 
 # How it works
+
+![](../images/aws-cni.png)
 
 ## containerd
 
