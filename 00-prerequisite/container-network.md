@@ -221,7 +221,7 @@ CRI plugin invokes CNI plugin to setup network.
 
 # CNI plugins
 
-- AWS-CNI (TODO)
+- [AWS-CNI](https://github.com/LukeFrostmourne/deep-dive-into-k8s/blob/master/00-prerequisite/aws-cni.md)
 
 - Flanel
 
