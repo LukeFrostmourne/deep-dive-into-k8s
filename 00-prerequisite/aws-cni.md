@@ -194,7 +194,7 @@ In case of our general nodes(m5a.8xlarge), maximum is  `8*30 - 8  = 232`  per no
 
 ### aws-cni bin
 
-[amazon-vpc-cni-k8s/cni.go at master · aws/amazon-vpc-cni-k8s](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/cmd/routed-eni-cni-plugin/cni.go)
+[amazon-vpc-cni-k8s](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/cmd/routed-eni-cni-plugin/cni.go)
 
 It provides two functions [add](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/cmd/routed-eni-cni-plugin/cni.go#L114) and [del](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/cmd/routed-eni-cni-plugin/cni.go#L269) to add or delete network for a pod.
 
