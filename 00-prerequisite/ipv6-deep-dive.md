@@ -284,11 +284,11 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
     
 2. Duplicate Address Detection
     
-    Make sure that the address is actually unique in the local segment. Send [****Neighbor Solicitation****](https://www.notion.so/Neighbor-Solicitation-015b0cad7fa84c0b8ec4976d4330fd27?pvs=21) to see if there’s [****Neighbor Advertisement****](https://www.notion.so/Neighbor-Advertisement-79a7bc40ac0c4c3d851b5882306506e5?pvs=21) . 
+    Make sure that the address is actually unique in the local segment. Send `neighbor Solicitation` to see if there’s `Neighbor Advertisement`. 
     
 3. Get global unicast address
     
-    Request [****Router Advertisement****](https://www.notion.so/Router-Advertisement-a50621c7b19a40ab92a2ba535f7f5486?pvs=21) to get a global prefix.
+    Request `Router Advertisement` to get a global prefix.
     
     ```bash
         ICMPv6 Option (Prefix information : 2406:da14:2:7702::/64)
@@ -322,9 +322,9 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
 
 ### DHCPv6
 
-[****Router Advertisement****](https://www.notion.so/Router-Advertisement-a50621c7b19a40ab92a2ba535f7f5486?pvs=21) is used for DHCP configuration too.
+`Router Advertisement` is used for DHCP configuration too.
 
-1. [****Router Solicitation****](https://www.notion.so/Router-Solicitation-b7716d8f96024c6b961707171866d253?pvs=21) 
+1. `Router Solicitation` 
     
     set default gateway with the src address of the router
     
@@ -338,7 +338,7 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
     
 2. Search for DHCP server
     
-    send DHCPv6 SOLICIT message to the  multicast group `FF02::1:2` (DHCP servers must be configured with this [multicast group](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21)).
+    send DHCPv6 SOLICIT message to the  multicast group `FF02::1:2` (DHCP servers must be configured with multicast group).
     
 3. Get global unicast address
     
@@ -346,7 +346,7 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
     
 
 <aside>
-💡 I’m talking about stateful DHCPv6 here, there’s also stateless DHCPv6 which works together with SLACC.
+💡 I’m only talking about stateful DHCPv6 here, there’s also stateless DHCPv6 which works together with SLACC.
 
 </aside>
 
@@ -354,7 +354,6 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
 
 ***Kernel 5.14***
 
-[https://whimsical.com/ebpf-datapath-CEo2pwLta7UADkTwXb9Qqh](https://whimsical.com/ebpf-datapath-CEo2pwLta7UADkTwXb9Qqh)
 
 ## Tx
 
