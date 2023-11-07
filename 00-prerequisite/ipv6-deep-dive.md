@@ -3,7 +3,7 @@
 
 ## Header
 
-![Untitled](IPv6%20deep%20dive%20b08343fd7be84f9080fa12acd8c311f0/Untitled.png)
+![](../images/ipv6-header.png)
 
 IPv6 header only has information for forwarding.
 
