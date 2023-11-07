@@ -1,18 +1,3 @@
-# IPv6 deep dive
-
-Authors: Luke
-Component: SPaaS Network (https://www.notion.so/SPaaS-Network-c70caf6b64954f49a364be4e4e07cd93?pvs=21)
-Created time: March 23, 2023 2:53 PM
-Last edited time: June 27, 2023 4:45 PM
-Status: Active
-Component Contributors: Simon Wu
-Component Driver: Luke
-Reviewers: Simon Wu
-Study Sessions: IPv6 Deep Dive Part1 (https://www.notion.so/IPv6-Deep-Dive-Part1-0f6b90d25834446ba2cfe474e26b4b99?pvs=21), IPv6 Deep Dive Part2 (https://www.notion.so/IPv6-Deep-Dive-Part2-597e6e4c70b743a9ab1eab066fe583de?pvs=21), IPv6 Deep Dive Part3 (https://www.notion.so/IPv6-Deep-Dive-Part3-b71b0a8c86d94867bee2f542fe512398?pvs=21)
-
-# Before you start
-
-check the introduction of [Adopting IPv6 in SPaaS](https://www.notion.so/Adopting-IPv6-in-SPaaS-8222dec8155441e5abe09afb83ef3c22?pvs=21) 
 
 # Packet
 
