@@ -353,7 +353,7 @@ Stateless Address Auto-configuration, auto-configure a unique IPv6 address witho
 # Kernel implementation
 
 ***Kernel 5.14***
-
+![](../images/linux-datapath.png)
 
 ## Tx
 
