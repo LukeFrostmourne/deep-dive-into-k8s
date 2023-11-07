@@ -419,12 +419,12 @@ curl http://[2406:da14:2:7702:91b6::f]
     - `sock_alloc` allocates an [inode](https://en.wikipedia.org/wiki/Inode). If there is no available inode, socket creation fails.
         
         ```bash
-        [root@ip-10-0-70-40 ec2-user]# df -i
+        # df -i
         Filesystem      Inodes      IUsed    IFree      IUse%  Mounted on
         devtmpfs        32629940    492      32629448    1%    /dev 
         
         # limit of this user
-        [root@ip-10-0-70-40 ec2-user]# ulimit -i
+        # ulimit -i
         30446
         ```
         
@@ -502,7 +502,7 @@ curl http://[2406:da14:2:7702:91b6::f]
     we can see all the created sockets in the host.
     
     ```bash
-    [root@ip-172-16-148-249 ec2-user]# netstat -6 -a
+    # netstat -6 -a
     Active Internet connections (servers and established)
     Proto Recv-Q Send-Q Local Address           Foreign Address         State
     tcp6       0      0 [::]:9253               [::]:*                  LISTEN
@@ -809,13 +809,13 @@ curl http://[2406:da14:2:7702:91b6::f]
     
     - get route information from [FIB](https://en.wikipedia.org/wiki/Forwarding_information_base#:~:text=A%20forwarding%20information%20base%20(FIB,interface%20should%20forward%20a%20packet.) (`[ip6_dst_lookup_tail](https://elixir.bootlin.com/linux/v5.14/C/ident/ip6_dst_lookup_tail)` or `[fib_table_lookup](https://elixir.bootlin.com/linux/v5.14/C/ident/fib_table_lookup)`)
         
-        ```c
-        [root@ip-10-0-70-40 ec2-user]# ip r
+        ```bash
+        # ip r
         default via 10.0.64.1 dev eth0
         10.0.64.0/21 dev eth0 proto kernel scope link src 10.0.70.40
         10.2.225.144 dev eni697de674575 scope link
         
-        [root@ip-10-0-70-40 ec2-user]# ip -6 r
+        # ip -6 r
         fe80::/64 dev eth0 proto kernel metric 256 pref medium
         fe80::/64 dev eth1 proto kernel metric 256 pref medium
         fe80::/64 dev eni697de674575 proto kernel metric 256 pref medium
@@ -824,8 +824,8 @@ curl http://[2406:da14:2:7702:91b6::f]
     - build IP headers
     - run hooks registered at  `NF_INET_LOCAL_OUT` before sending out(the OUTPUT chain).
         
-        ```c
-        [root@ip-10-0-70-40 ec2-user]# iptables -L -t raw -v -n -w
+        ```bash
+        # iptables -L -t raw -v -n -w
         Chain OUTPUT (policy ACCEPT 267M packets, 506G bytes)
          pkts bytes target     prot opt in     out     source               destination
             0     0 CT         tcp  --  *      *       172.20.0.10          0.0.0.0/0            tcp spt:9003 NOTRACK
@@ -917,7 +917,7 @@ curl http://[2406:da14:2:7702:91b6::f]
     XFRM policy will be evaluated first,  we don’t have any in our nodes.
     
     ```c
-    [root@ip-10-0-70-40 ec2-user]# ip xfrm policy list
+    # ip xfrm policy list
     ```
     
     Then check MTU and fragment the packet if it’s too big.
@@ -932,7 +932,7 @@ curl http://[2406:da14:2:7702:91b6::f]
     ```
     
     <aside>
-    💡 It’s the second time for IPv6 to check MTU [the main difference here is IPv6 also checks MTU([**Fragment/PMTU**](https://www.notion.so/Fragment-PMTU-9dbdbea1df544b53b0184234fec8af93?pvs=21) ), the packet will dropped if it’s bigger than MTU.](https://www.notion.so/the-main-difference-here-is-IPv6-also-checks-MTU-the-packet-will-dropped-if-it-s-bigger-than-MTU-23e55b1e85eb4f30a86a958369c9f8ae?pvs=21) The packet isn’t dropped this time.
+    💡 It’s the second time for IPv6 to check MTU [the main difference here is IPv6 also checks MTU, the packet will dropped if it’s bigger than MTU The packet isn’t dropped this time.
     
     </aside>
     
@@ -964,10 +964,7 @@ curl http://[2406:da14:2:7702:91b6::f]
             neigh = ip_neigh_for_gw(rt, skb, &is_v6gw);
             ```
             
-        - IPv6, `[__ipv6_neigh_lookup_noref](https://elixir.bootlin.com/linux/v5.14/source/include/net/ndisc.h#L381)` gets the MAC address from cache(`ip -6 neigh show`), and if the entry isn’t found `[__neigh_create](https://github.com/torvalds/linux/blob/v5.14/net/core/neighbour.c#L578)` tries to create a new neighbor cache entry by sending an ICMPv6 NS message.
-            
-            [ICMPv6 discovery packets](https://www.notion.so/ICMPv6-discovery-packets-155f2779c10f4ab8a6e5786302986682?pvs=21) 
-            
+        - IPv6, `[__ipv6_neigh_lookup_noref](https://elixir.bootlin.com/linux/v5.14/source/include/net/ndisc.h#L381)` gets the MAC address from cache(`ip -6 neigh show`), and if the entry isn’t found `[__neigh_create](https://github.com/torvalds/linux/blob/v5.14/net/core/neighbour.c#L578)` tries to create a new neighbor cache entry by sending an ICMPv6 NS message.            
             ```c
             nexthop = rt6_nexthop((struct rt6_info *)dst, &ipv6_hdr(skb)->daddr);
             neigh = __ipv6_neigh_lookup_noref(dst->dev, nexthop);
@@ -979,8 +976,7 @@ curl http://[2406:da14:2:7702:91b6::f]
         
         ```c
         ret = neigh_output(neigh, skb, false);
-        ```
-        
+        ```        
 
 ### Neighbor cache
 
@@ -1261,7 +1257,7 @@ static int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
 - Devices without qdisc
     
     ```bash
-    [root@ip-10-0-70-40 ec2-user]# tc qdisc show dev lo
+    # tc qdisc show dev lo
     qdisc noqueue 0: root refcnt 2
     ```
     
@@ -1278,7 +1274,6 @@ static int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
     ...
     ```
     
-
 ### Physical layer
 
 **`[dev_hard_start_xmit](https://elixir.bootlin.com/linux/v5.14/C/ident/dev_hard_start_xmit)`** sends the packet to the actual network device.
@@ -1368,7 +1363,7 @@ Basically the network device driver(in physical machines) does:
     `[net_rx_action](https://elixir.bootlin.com/linux/v5.14/source/net/core/dev.c#L7178)`  starts the network data process which handles the data(napi_struct) in the queue for the current CPU. To prevent packet processing from consuming the entire CPU, there’s a budget setting.
     
     ```bash
-    [ec2-user@ip-10-0-70-40 ~]$ sysctl  net.core.netdev_budget
+   $ sysctl  net.core.netdev_budget
     net.core.netdev_budget = 300
     ```
     
@@ -1550,7 +1545,7 @@ int ip_rcv(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
     }
     ```
     
-    1. similar to [tx](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21),  if ingress device is enslaved to an L3 master device, skb is handed over to its handler.
+    1. similar to tx,  if ingress device is enslaved to an L3 master device, skb is handed over to its handler.
     2. **`[ip_rcv_finish_core](https://elixir.bootlin.com/linux/v5.14/C/ident/ip_rcv_finish_core)`** updates routing and perform *early demultiplexing*
         - use cache if it’s available otherwise does full routing lookup
             
@@ -1595,7 +1590,7 @@ int ip_rcv(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
             - udp packets of established connections
                 
                 ```bash
-                [root@ip-10-0-70-40 ec2-user]# netstat -anu
+                # netstat -anu
                 Active Internet connections (servers and established)
                 Proto Recv-Q Send-Q Local Address           Foreign Address         State
                 udp        0      0 10.0.70.40:50618        10.0.0.2:53             ESTABLISHED
@@ -1841,7 +1836,7 @@ Difference in IPV6 : **`[ip6_rcv_core](https://elixir.bootlin.com/linux/v5.14/C/
             ```
             
             <aside>
-            💡 [TCP window size](https://en.wikipedia.org/wiki/TCP_tuning#Window_size) is [decided](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21) during 3-way handshake, it’s used for the receiver side to buffer data.
+            💡 [TCP window size](https://en.wikipedia.org/wiki/TCP_tuning#Window_size) is decided during 3-way handshake, it’s used for the receiver side to buffer data.
             
             </aside>
             
@@ -1946,7 +1941,7 @@ func main() {
 
 Invoke [system calls](https://github.com/torvalds/linux/blob/v5.14/net/socket.c#L2910) which is using `sock->ops` functions (`[inet6_stream_ops](https://elixir.bootlin.com/linux/v5.14/source/net/ipv6/af_inet6.c#L666)` in case of IPv6).
 
-1. create a [socket](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21) 
+1. create a socket
 2. [bind](https://man7.org/linux/man-pages/man2/bind.2.html)
 3. [listen](https://man7.org/linux/man-pages/man2/listen.2.html) 
     
@@ -1987,7 +1982,7 @@ Invoke [system calls](https://github.com/torvalds/linux/blob/v5.14/net/socket.c#
     
 4. [recvfrom](https://linux.die.net/man/2/recvfrom)
     
-    Read the data(message) from the socket(similar to [Send data to the socket using [sendto](https://man7.org/linux/man-pages/man3/sendto.3p.html)](https://www.notion.so/Send-data-to-the-socket-using-sendto-783bf96d46f94ff99bce728695cc38d5?pvs=21) but reversed). 
+    Read the data(message) from the socket(similar to [Send data to the socket using `sendto` but reversed). 
     
     ```c
     int __sys_recvfrom(int fd, void __user *ubuf, size_t size, unsigned int flags,
