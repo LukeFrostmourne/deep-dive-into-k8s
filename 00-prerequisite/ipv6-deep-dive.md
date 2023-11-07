@@ -15,7 +15,7 @@ IPv6 header only has information for forwarding.
     conn.SetTrafficClass(0x10)
     ```
     
-    [ipv6 package - golang.org/x/net/ipv6 - Go Packages](https://pkg.go.dev/golang.org/x/net/ipv6#Conn.SetTrafficClass)
+    [golang implementation](https://pkg.go.dev/golang.org/x/net/ipv6#Conn.SetTrafficClass)
     
 - **Flow Label**: Linux kernel creates a flow hash with [flow label](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv6/ip6_output.c?h=v6.3#n315), source address and destination address. This flow hash is then used to select a specific flow handler (e.g. set QoS parameters), but this feature is not widely supported by many network devices.
     
@@ -135,7 +135,7 @@ $ ip -6 maddr show dev eth0
 ### ICMPv6 discovery packets
 
 ```bash
-[root@ip-172-16-148-249 ec2-user]# tcpdump -i eth0 icmp6
+# tcpdump -i eth0 icmp6
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 03:25:32.976673 IP6 fe80::ce4:acff:fe9a:a89 > 2406:da14:2:7702::f89b: ICMP6, neighbor solicitation, who has 2406:da14:2:7702::f89b, length 32
@@ -272,7 +272,7 @@ Basically there are two ways to get an IPv6 address to configure an interface.
 
 Stateless Address Auto-configuration, auto-configure a unique IPv6 address without tracking which address is assigned to which node(no server or any network device keeps such information).
 
-1. Configure [link local](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21) address
+1. Configure link local address
     
     This address is generated from the MAC address
     
