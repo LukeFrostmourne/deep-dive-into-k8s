@@ -509,13 +509,7 @@ We’re not using cilium for pod networking instead it is done by [AWS CNI](http
 - cilium doesn’t support IPv6
 - aws-cni networking is handled by AWS which reduces our operation cost
 
-![Untitled](Cilium%20Deep%20Dive%207396f352fb3b4ecaa557effd54e4ea8a/Untitled.png)
-
-## aws-cni
-
-We already explained the implementation details here: [aws-cni](https://www.notion.so/aws-cni-ea3b9c86621344a5af1ca3d5698cd86e?pvs=21) 
-
-IPv6 support: [EKS](https://www.notion.so/EKS-7c069b84cd5f4849bc330a8048e9fe2b?pvs=21) 
+![](../images/cilium-node.png)
 
 > **Advantages of the model**
 > 
@@ -581,12 +575,12 @@ multicast ff00::/8 dev eth0  metric 256
 We can see the other end of the veth pair
 
 ```bash
-[root@ip-10-3-116-232 ec2-user]# ip -6 a |grep 43021 -A 3
+# ip -6 a |grep 43021 -A 3
 43021: eni161d6f0e0eb@dummy0: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 9001 state UP qlen 1000
     inet6 fe80::dcfb:89ff:fe0a:4aad/64 scope link
        valid_lft forever preferred_lft forever
 
-[root@ip-10-3-116-232 ec2-user]# ip a |grep 43022 -A 3
+# ip a |grep 43022 -A 3
 43022: vetha0a7a2cb@if5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc noqueue state UP group default
     link/ether 6e:82:9e:28:af:42 brd ff:ff:ff:ff:ff:ff link-netnsid 48
     inet 169.254.172.1/32 scope link vetha0a7a2cb
@@ -596,10 +590,10 @@ We can see the other end of the veth pair
 BPF program is attached to the device by cilium
 
 ```bash
-[root@ip-10-3-116-232 ec2-user]# tc filter show dev eni161d6f0e0eb ingress
+# tc filter show dev eni161d6f0e0eb ingress
 filter protocol all pref 1 bpf chain 0
 filter protocol all pref 1 bpf chain 0 handle 0x1 cil_from_container-eni161d6f0e0eb direct-action not_in_hw id 307197 tag bc2850e07bdbe41f jited
-[root@ip-10-3-116-232 ec2-user]# tc filter show dev eni161d6f0e0eb egress
+# tc filter show dev eni161d6f0e0eb egress
 filter protocol all pref 1 bpf chain 0
 filter protocol all pref 1 bpf chain 0 handle 0x1 cil_to_container-eni161d6f0e0eb direct-action not_in_hw id 307482 tag 3d2629fde49da242 jited
 ```
@@ -618,7 +612,7 @@ default via 10.3.112.1 dev eth0
 
 # k8s Service balancing (kube-proxy replacement)
 
-![cilium-kpr.png](Cilium%20Deep%20Dive%207396f352fb3b4ecaa557effd54e4ea8a/cilium-kpr.png)
+![](../images/cilium-kpr.png)
 
 ## Datapath
 
@@ -630,7 +624,7 @@ default via 10.3.112.1 dev eth0
     # ip -6 r
     default via fe80::1 dev eth0  metric 1024 
     
-    [root@ip-10-3-116-232 ec2-user]# ip -6 a |grep 43021 -A 3
+    # ip -6 a |grep 43021 -A 3
     43021: eni161d6f0e0eb@dummy0: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 9001 state UP qlen 1000
         inet6 fe80::dcfb:89ff:fe0a:4aad/64 scope link
            valid_lft forever preferred_lft forever
@@ -647,10 +641,10 @@ default via 10.3.112.1 dev eth0
     }
     ```
     
-3. The `[cil_from_container](https://github.com/cilium/cilium/blob/main/bpf/bpf_lxc.c#L1346)` BPF program handles all the packets from the container
+3. The [cil_from_container](https://github.com/cilium/cilium/blob/main/bpf/bpf_lxc.c#L1346) BPF program handles all the packets from the container
     
     ```bash
-    [root@ip-10-3-116-232 ec2-user]# tc filter show dev eni161d6f0e0eb ingress
+    # tc filter show dev eni161d6f0e0eb ingress
     filter protocol all pref 1 bpf chain 0
     filter protocol all pref 1 bpf chain 0 handle 0x1 cil_from_container-eni161d6f0e0eb direct-action not_in_hw id 307197 tag bc2850e07bdbe41f jited
     ```
@@ -679,7 +673,7 @@ default via 10.3.112.1 dev eth0
     }
     ```
     
-    Eventually `[tail_handle_ipv6](https://github.com/cilium/cilium/blob/3cfe559a2dcd0e80a40cb6b91023d24b50456a56/bpf/bpf_lxc.c#L760)`  is called for IPv6.
+    Eventually [tail_handle_ipv6](https://github.com/cilium/cilium/blob/3cfe559a2dcd0e80a40cb6b91023d24b50456a56/bpf/bpf_lxc.c#L760)  is called for IPv6.
     
     1. Check the IP in `cilium_ipcache`
         
@@ -752,22 +746,13 @@ default via 10.3.112.1 dev eth0
         
         </aside>
         
-    3. DNAT and encapsulation
-        
-        ~~we’re using [vxlan tunnel](https://docs.cilium.io/en/stable/network/concepts/routing/#encapsulation)~~
-        
-        Pass packet to IP protocol handler
-        
-        <aside>
-        💡 [Native routing](https://docs.cilium.io/en/stable/network/concepts/routing/#native-routing) should also work in our case.
-        
-        </aside>
-        
+    3. DNAT and encapsulation         
+        Pass packet to IP protocol handler 
     
     3.  Host egress
     
     ```bash
-    [root@ip-10-3-116-232 ec2-user]# tc filter show dev eth0 egress
+    # tc filter show dev eth0 egress
     filter protocol all pref 1 bpf chain 0
     filter protocol all pref 1 bpf chain 0 handle 0x1 cil_to_netdev-eth0 direct-action not_in_hw id 307890 tag 6ae328638dbe48f9 jited
     ```
@@ -789,7 +774,7 @@ default via 10.3.112.1 dev eth0
 1. The packet is handled by [ingress BPF program](https://github.com/cilium/cilium/blob/main/bpf/bpf_host.c#L1310) on eth0
     
     ```bash
-    [root@ip-10-3-116-232 ec2-user]# tc filter show dev eth0 ingress
+    # tc filter show dev eth0 ingress
     filter protocol all pref 1 bpf chain 0
     filter protocol all pref 1 bpf chain 0 handle 0x1 cil_from_netdev-eth0 direct-action not_in_hw id 307883 tag ce64dc67f0563fb3 jited
     ```
@@ -824,7 +809,7 @@ default via 10.3.112.1 dev eth0
 3. tc [egress BPF](https://github.com/cilium/cilium/blob/main/bpf/bpf_lxc.c#L2146)
     
     ```bash
-    [root@ip-10-3-116-232 ec2-user]# tc filter show dev eni161d6f0e0eb egress
+    # tc filter show dev eni161d6f0e0eb egress
     filter protocol all pref 1 bpf chain 0
     filter protocol all pref 1 bpf chain 0 handle 0x1 cil_to_container-eni161d6f0e0eb direct-action not_in_hw id 307482 tag 3d2629fde49da242 jited
     ```
@@ -839,7 +824,7 @@ default via 10.3.112.1 dev eth0
 💡 I didn’t cover all the BPF programs, you can see them with these commands
 
 ```bash
-root@ip-10-3-116-232:/home/cilium# bpftool net
+/home/cilium# bpftool net
 xdp:
 
 tc:
@@ -851,7 +836,7 @@ eth0(2) clsact/ingress cil_from_netdev-eth0 id 307883
 eth0(2) clsact/egress cil_to_netdev-eth0 id 307890
 eni344c20dd393(63491) clsact/ingress cil_from_container-eni344c20dd393 id 385438
 ...
-root@ip-10-3-116-232:/home/cilium# bpftool cgroup list /run/cilium/cgroupv2
+/home/cilium# bpftool cgroup list /run/cilium/cgroupv2
 ID       AttachType      AttachFlags     Name           
 307172   cgroup_inet6_connect                 cil_sock6_connect
 307176   cgroup_inet6_post_bind                 cil_sock6_post_bind
@@ -894,7 +879,7 @@ func (d *Daemon) initMaps() error {
 we also can see the created maps on the host
 
 ```bash
-[root@ip-10-3-116-232 ec2-user]# ls /sys/fs/bpf/tc/globals/
+[# ls /sys/fs/bpf/tc/globals/
 cilium_call_policy  cilium_calls_00841  cilium_calls_01541  cilium_calls_02641
 ...
 ```
@@ -902,7 +887,7 @@ cilium_call_policy  cilium_calls_00841  cilium_calls_01541  cilium_calls_02641
 we can use [cilium bpf](https://docs.cilium.io/en/latest/cmdref/cilium_bpf/) command to see the content
 
 ```bash
-root@ip-10-3-116-232:/home/cilium# cilium bpf ct list global | head -5
+/home/cilium# cilium bpf ct list global | head -5
 TCP IN 2406:da14:8ba:1a00::6b1c:51218 -> 2406:da14:8ba:1a00:af45::1:3101 expires=6255646 RxPackets=10 RxBytes=1128 RxFlagsSeen=0x1b LastRxReport=6255636 TxPackets=10 TxBytes=1156 TxFlagsSeen=0x1b LastTxReport=6255636 Flags=0x0013 [ RxClosing TxClosing SeenNonSyn ] RevNAT=0 SourceSecurityID=1 IfIndex=0 
 TCP IN 2406:da14:8ba:1a00::6b1c:49368 -> 2406:da14:8ba:1a00:af45::29:8181 expires=6255421 RxPackets=5 RxBytes=565 RxFlagsSeen=0x1b LastRxReport=6255411 TxPackets=5 TxBytes=575 TxFlagsSeen=0x1b LastTxReport=6255411 Flags=0x0013 [ RxClosing TxClosing SeenNonSyn ] RevNAT=0 SourceSecurityID=1 IfIndex=0 
 TCP IN 2406:da14:8ba:1a00::6b1c:57770 -> 2406:da14:8ba:1a00:af45::1f:8080 expires=6246714 RxPackets=5 RxBytes=567 RxFlagsSeen=0x1b LastRxReport=6246704 TxPackets=5 TxBytes=575 TxFlagsSeen=0x1b LastTxReport=6246704 Flags=0x0013 [ RxClosing TxClosing SeenNonSyn ] RevNAT=0 SourceSecurityID=1 IfIndex=0 
@@ -1066,7 +1051,7 @@ SERVICE ADDRESS                    BACKEND ADDRESS (REVNAT_ID) (SLOT)
 This [command](https://github.com/cilium/cilium/blob/main/cilium/cmd/bpf_lb_list.go#L123) retrieves the information from [4 maps](https://github.com/cilium/cilium/blob/main/pkg/maps/lbmap/ipv6.go#L21)
 
 ```go
-root@ip-10-3-112-107:/home/cilium# cilium map list
+/home/cilium# cilium map list
 Name                       Num entries   Num errors   Cache enabled
 cilium_lb6_source_range    0             0            true
 cilium_lb6_services_v2     53            0            true
@@ -1077,14 +1062,14 @@ cilium_lb6_reverse_nat     58            0            true
 Check if the backend is in `ipcache` map
 
 ```bash
-root@ip-10-3-112-107:/home/cilium# cilium map get cilium_ipcache | grep 2406:da14:8ba:1a00:af45::4
+/home/cilium# cilium map get cilium_ipcache | grep 2406:da14:8ba:1a00:af45::4
 2406:da14:8ba:1a00:af45::4/128               identity=6614317 encryptkey=0 tunnelendpoint=0.0.0.0 nodeid=38780   sync
 ```
 
 Check the `conntrack` map
 
 ```bash
-root@ip-10-3-112-107:/home/cilium# cilium map get cilium_lb6_reverse_nat
+/home/cilium# cilium map get cilium_lb6_reverse_nat
 Key     Value                              State   Error
 34      [fd8b:bab:fcd3::65d0]:9090         sync    
 8       [fd8b:bab:fcd3::a697]:9090         sync    
@@ -1124,12 +1109,12 @@ func NewClusterMesh(c Configuration) ClusterMesh {
 The config is mounted in cilium-agent pod, as you can see it can access all etcd services(the clustermesh-apiserver etcd) of each cluster.
 
 ```bash
-root@ip-172-16-149-96:/home/cilium# ls /var/lib/cilium/clustermesh/
+/home/cilium# ls /var/lib/cilium/clustermesh/
 kafka-0-dev-tokyo                     kafka-0-dev-tokyo.etcd-client.key     kafka-1-dev-tokyo.etcd-client.crt
 kafka-0-dev-tokyo.etcd-client-ca.crt  kafka-1-dev-tokyo                     kafka-1-dev-tokyo.etcd-client.key
 kafka-0-dev-tokyo.etcd-client.crt     kafka-1-dev-tokyo.etcd-client-ca.crt
 
-root@ip-172-16-149-96:/home/cilium# cat /var/lib/cilium/clustermesh/kafka-0-dev-tokyo
+/home/cilium# cat /var/lib/cilium/clustermesh/kafka-0-dev-tokyo
 endpoints:
 - https://clustermesh-apiserver-kafka-0.dev.smartnews.net:2379
 trusted-ca-file: /var/lib/cilium/clustermesh/kafka-0-dev-tokyo.etcd-client-ca.crt
@@ -1263,39 +1248,6 @@ At last [[Sync](https://github.com/cilium/cilium/blob/main/pkg/k8s/watchers/watc
 
 </aside>
 
-# External etcd consideration
-
-One clustermesh-apiserver etcd needs to serve requests from all cilium-agents of all clusters, in production env we must use separated  etcd cluster per cluster instead of a sidecar.
-
-<aside>
-💡 etcd is used to store service cache, clustermesh-apiserver reconciles it when restart. so no need to care about backup and restore.
-
-</aside>
-
-https://cilium.slack.com/archives/C53TG4J4R/p1691465344640049?thread_ts=1690893858.895149&cid=C53TG4J4R
-
-> There are two topics here. The one is using kvstore other than k8s as a datastore of Cilium ([https://docs.cilium.io/en/latest/installation/k8s-install-external-etcd/](https://docs.cilium.io/en/latest/installation/k8s-install-external-etcd/)). And sorry, I was wrong it was not deprecated. It can be used for better scalability, but I wouldn’t recommend you to use that since many features of Cilium don’t support this mode. Another topic is how to manage the kvstore of the clustermesh. We used to have (external) etcd mode for clustermesh, but it’s deprecated AFAIK.
-> 
-
-> 
-> 
-> 
-> > and when using kvstoremesh, is the cilium-operator syncing services to this kvstore? I can see some logic
-> > 
-> > 
-> > [here](https://github.com/cilium/cilium/blob/main/operator/cmd/root.go#L507)
-> > 
-> > [the same logic](https://github.com/cilium/cilium/blob/main/clustermesh-apiserver/main.go#L568)
-> > 
-> 
-> No, Cilium Operator is only involved in the first topic I mentioned above. In clustermesh, clustermesh-apiserver is responsible for syncing the k8s objects to etcd. (edited)
-> 
-
-**[KVStoreMesh](https://docs.cilium.io/en/stable/network/clustermesh/intro/) is one solution** 
-
-> It caches the information obtained from the remote clusters in a local kvstore (such as etcd), to which all local Cilium agents connect. This is different from vanilla Cluster Mesh, where each agent directly pulls the information from the remote clusters
-> 
-
 ## kvstoremesh-operator
 
 A new container called kvstoremesh is added to clustermesh-apiserver pod
@@ -1325,14 +1277,14 @@ It’s doing similar work like cilium agent, [syncing](https://github.com/cilium
 There’s no code change, the only difference is the endpoint of remote etcd services is changed to local k8s service.
 
 ```bash
-root@ip-172-26-4-177:/home/cilium# cat /var/lib/cilium/clustermesh/common-0-dev-tokyo
+/home/cilium# cat /var/lib/cilium/clustermesh/common-0-dev-tokyo
 endpoints:
 - https://clustermesh-apiserver-common-0.dev.smartnews.net:2379
 trusted-ca-file: /var/lib/cilium/clustermesh/common-0-dev-tokyo.etcd-client-ca.crt
 key-file: /var/lib/cilium/clustermesh/common-0-dev-tokyo.etcd-client.key
 cert-file: /var/lib/cilium/clustermesh/common-0-dev-tokyo.etcd-client.crt
 
-root@ip-172-26-4-177:/home/cilium# cat /var/lib/cilium/clustermesh/common-0-dev-tokyo 
+/home/cilium# cat /var/lib/cilium/clustermesh/common-0-dev-tokyo 
 endpoints:
 - https://clustermesh-apiserver.kube-system.svc:2379
 trusted-ca-file: /var/lib/cilium/clustermesh/common-etcd-client-ca.crt
