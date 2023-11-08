@@ -251,7 +251,7 @@ cilium-operator-resource-lock   ip-10-3-116-232.ap-northeast-1.compute.internal-
         
         ```yaml
         cluster-id: '1'
-        cluster-name: kafka-0-dev-tokyo
+        cluster-name: xxx
         identity-allocation-mode: crd
         ```
         
@@ -263,7 +263,7 @@ cilium-operator-resource-lock   ip-10-3-116-232.ap-northeast-1.compute.internal-
     ╰─ k get svc clustermesh-apiserver
     
     NAME                    TYPE           CLUSTER-IP            EXTERNAL-IP                                                                          PORT(S)          AGE
-    clustermesh-apiserver   LoadBalancer   fd8b:bab:fcd3::f676   k8s-kubesyst-clusterm-a605d7489a-5046507b65ed174a.elb.ap-northeast-1.amazonaws.com   2379:32491/TCP   81d
+    clustermesh-apiserver   LoadBalancer   fd8b:bab:fcd3::f676   xxx.elb.ap-northeast-1.amazonaws.com   2379:32491/TCP   81d
     ```
     
 
@@ -366,13 +366,13 @@ It has 7 init containers for initialization.
     It reads config from confgimap `cilium-config` and [creates config files](https://github.com/cilium/cilium/blob/cc94abe1afb8cf5e6479603b12ba89fcfeb7e387/cilium/cmd/build-config.go#L72) for each option
     
     ```bash
-    root@ip-172-16-149-111:/home/cilium# ls /tmp/cilium/config-map/
+    /home/cilium# ls /tmp/cilium/config-map/
     agent-not-ready-taint-key            enable-health-checking                       monitor-aggregation-flags
     arping-refresh-period                enable-host-legacy-routing                   monitor-aggregation-interval
     auto-direct-node-routes              enable-ipv4
     ...
     
-    root@ip-172-16-149-111:/home/cilium# cat /tmp/cilium/config-map/enable-ipv6
+    /home/cilium# cat /tmp/cilium/config-map/enable-ipv6
     true
     ```
     
@@ -424,12 +424,6 @@ It has 7 init containers for initialization.
     - command:
       - /init-container.sh
     ```
-    
-    <aside>
-    💡 asking the community about the impact [https://cilium.slack.com/archives/C53TG4J4R/p1690357305579459](https://cilium.slack.com/archives/C53TG4J4R/p1690357305579459) 
-    it’s disabled by default
-    
-    </aside>
     
 - install-cni-binaries
     
@@ -509,8 +503,6 @@ It has 7 init containers for initialization.
         
 
 # Pod networking
-
-[eBPF Introduction](https://www.notion.so/eBPF-Introduction-e3b6e2ba1ad14ad898bb942a5d6a0478?pvs=21) 
 
 We’re not using cilium for pod networking instead it is done by [AWS CNI](https://docs.cilium.io/en/stable/installation/cni-chaining-aws-cni/), because of two main reasons
 
