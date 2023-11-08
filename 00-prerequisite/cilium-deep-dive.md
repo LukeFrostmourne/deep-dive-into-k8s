@@ -1,15 +1,39 @@
 # Cilium Deep Dive
-
-Authors: Luke
-Component: Cilium (https://www.notion.so/Cilium-3caabeba2b464671a5d6079154b43f01?pvs=21)
-Created time: June 28, 2023 12:49 PM
-Last edited time: September 4, 2023 4:23 PM
-Status: Active
-Component Contributors: Luke
-Component Driver: Simon Wu
-Reviewers: Simon Wu
-Study Sessions: Cilium Deep Dive  (https://www.notion.so/Cilium-Deep-Dive-74173033bd614806a7a0e371f8841044?pvs=21)
-
+- [Architecture](#architecture)
+   * [cilium-operator](#cilium-operator)
+      + [Initialize command](#initialize-command)
+      + [Start the operator](#start-the-operator)
+   * [clustermesh-apiserver](#clustermesh-apiserver)
+      + [Setup](#setup)
+      + [Responsibility](#responsibility)
+   * [cilium-agent](#cilium-agent)
+      + [Setup](#setup-1)
+      + [Agent Start](#agent-start)
+- [Pod networking](#pod-networking)
+   * [aws-cni](#aws-cni)
+   * [Datapath](#datapath)
+      + [Inside the pod](#inside-the-pod)
+      + [On the host](#on-the-host)
+- [k8s Service balancing (kube-proxy replacement)](#k8s-service-balancing-kube-proxy-replacement)
+   * [Datapath](#datapath-1)
+      + [TX](#tx)
+      + [RX](#rx)
+   * [BPF map operation](#bpf-map-operation)
+      + [Init maps](#init-maps)
+      + [Sync maps with k8s resources](#sync-maps-with-k8s-resources)
+   * [Troubleshooting](#troubleshooting)
+- [Clustermesh](#clustermesh)
+   * [clustermesh-apiserver](#clustermesh-apiserver-1)
+   * [cilium-agent](#cilium-agent-1)
+      + [Initialize ClusterMesh](#initialize-clustermesh)
+      + [Watch config changes](#watch-config-changes)
+      + [Connect to the etcd services](#connect-to-the-etcd-services)
+      + [Watch remote resources](#watch-remote-resources)
+      + [Sync to service cache](#sync-to-service-cache)
+- [External etcd consideration](#external-etcd-consideration)
+   * [kvstoremesh-operator](#kvstoremesh-operator)
+   * [cilium-agent](#cilium-agent-2)
+- [Reference](#reference)
 # Architecture
 
 ```bash
