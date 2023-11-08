@@ -1702,9 +1702,8 @@ Difference in IPV6 : **`[ip6_rcv_core](https://elixir.bootlin.com/linux/v5.14/C/
     		goto no_tcp_socket;
     ```
     
-2. Establish connection
-    
-    ![Untitled](IPv6%20deep%20dive%20b08343fd7be84f9080fa12acd8c311f0/Untitled%201.png)
+2. Establish connection    
+    ![](../images/tcp-handshake.png)
     
     1. Client [sends SYN](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21) 
         
@@ -1907,7 +1906,7 @@ Difference in IPV6 : **`[ip6_rcv_core](https://elixir.bootlin.com/linux/v5.14/C/
             one backlog is created per socket, the default limit is from system setting.
             
             ```bash
-            [root@ip-10-0-70-40 ec2-user] cat /proc/sys/net/ipv4/tcp_max_syn_backlog
+            cat /proc/sys/net/ipv4/tcp_max_syn_backlog
             4096
             
             # Recv-Q indicates the backlog queue
