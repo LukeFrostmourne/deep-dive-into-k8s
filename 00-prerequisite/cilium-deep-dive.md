@@ -1081,8 +1081,7 @@ Other tools
 [cilium monitor — Cilium 1.14.0 documentation](https://docs.cilium.io/en/stable/cmdref/cilium_monitor/)
 
 # Clustermesh
-
-![cilium-cm.png](Cilium%20Deep%20Dive%207396f352fb3b4ecaa557effd54e4ea8a/cilium-cm.png)
+![](../images/cilium-cm.png)
 
 Basically it works like aws-lb-controller
 
