@@ -1703,7 +1703,7 @@ Difference in IPV6 : **`[ip6_rcv_core](https://elixir.bootlin.com/linux/v5.14/C/
     ```
     
 2. Establish connection    
-    ![](../images/tcp-handshake.png)
+    ![](../images/tcp-handshakes.png)
     
     1. Client [sends SYN](https://www.notion.so/IPv6-deep-dive-b08343fd7be84f9080fa12acd8c311f0?pvs=21) 
         
