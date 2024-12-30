@@ -95,7 +95,7 @@ KEDA is a standard k8s operator following k8s operator pattern design.
 
 ### keda-operator
 
-[https://whimsical.com/keda-VPPLzLWZoQLfndkUSzxs65](https://whimsical.com/keda-VPPLzLWZoQLfndkUSzxs65)
+![](../images/keda.png)
 
 1. [main.go](https://github.com/kedacore/keda/blob/main/main.go#L114) starts all the controllers
     
