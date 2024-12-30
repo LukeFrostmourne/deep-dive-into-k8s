@@ -1,5 +1,13 @@
 # NodeLocal DNSCache
-
+- [Background](#background)
+- [IPv4](#ipv4)
+   * [Without local cache](#without-local-cache)
+   * [With  local cache](#with-local-cache)
+      + [Components](#components)
+      + [Architecture](#architecture)
+- [IPv6](#ipv6)
+   * [Setup](#setup)
+   * [DNS query datapath](#dns-query-datapath)
 
 # Background
 
