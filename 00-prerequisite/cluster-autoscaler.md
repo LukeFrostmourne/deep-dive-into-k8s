@@ -1,9 +1,29 @@
 # Cluster-autoscaler Architecture
 
+- [Overview](#overview)
+- [Nodegroups Caching](#nodegroups-caching)
+   * [AWSCloudProvider](#awscloudprovider)
+   * [CloudProviderNodeInstancesCache](#cloudprovidernodeinstancescache)
+      + [get ASGs](#get-asgs)
+      + [keep nodes cache updated](#keep-nodes-cache-updated)
+- [Scaling](#scaling)
+   * [Find unscheduled pods](#find-unscheduled-pods)
+   * [Scaling out](#scaling-out)
+      + [update cluster state](#update-cluster-state)
+      + [check limits](#check-limits)
+      + [get the insufficient resource amount](#get-the-insufficient-resource-amount)
+      + [find the best candidate nodegroups to scale](#find-the-best-candidate-nodegroups-to-scale)
+      + [scale up](#scale-up)
+   * [Scaling in](#scaling-in)
+      + [get pod distribution budget](#get-pod-distribution-budget)
+      + [get candidates](#get-candidates)
+      + [update cluster state](#update-cluster-state-1)
+      + [ScaleDown CD](#scaledown-cd)
+      + [get targets](#get-targets)
+      + [remove nodes](#remove-nodes)
+
 # Overview
-
-
-
+![](../images/cluster-autoscaler.png)
 Once CA starts it runs a metrics handler to serve and metrics and two go-routines  to do scaling job by using `StaticAutoscaler` , also it’s using client-go for leader election. You can run multiple replicas but only one is active.
 
 ```go
