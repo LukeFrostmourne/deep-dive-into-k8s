@@ -1,8 +1,38 @@
 # Mimir Overview
-
-
+- [Mimir Overview](#mimir-overview)
+- [Architecture](#architecture)
+- [Components](#components)
+   * [Gateway](#gateway)
+      + [deployment](#deployment)
+      + [service](#service)
+      + [ingress](#ingress)
+   * [Writes Components](#writes-components)
+      + [Distributor](#distributor)
+      + [Ingester](#ingester)
+   * [Reads Components](#reads-components)
+      + [Query-frontend](#query-frontend)
+      + [Query-scheduler](#query-scheduler)
+      + [Querier](#querier)
+      + [Ruler](#ruler)
+      + [Store-gateway](#store-gateway)
+   * [Storage Components](#storage-components)
+      + [S3 bucket](#s3-bucket)
+      + [Cache](#cache)
+      + [Compactor](#compactor)
+      + [Overrides-exporter](#overrides-exporter)
+- [Multi-tenant Support](#multi-tenant-support)
+   * [Config](#config)
+- [Usage Control](#usage-control)
+   * [Scrape interval](#scrape-interval)
+- [Known issues](#known-issues)
+   * [Too many unhealthy ingester in the ring](#too-many-unhealthy-ingester-in-the-ring)
+      + [Issue](#issue)
+      + [Solution](#solution)
+   * [Distributors keep crashing](#distributors-keep-crashing)
+      + [Issue](#issue-1)
+      + [Solution](#solution-1)
 # Architecture
-
+![](../images/mimir.png)
 
 [Grafana Mimir architecture |  Grafana Mimir documentation](https://grafana.com/docs/mimir/latest/get-started/about-grafana-mimir-architecture/)
 
