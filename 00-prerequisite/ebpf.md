@@ -5,7 +5,7 @@
 > eBPF is a revolutionary technology with origins in the Linux kernel that can run sandboxed programs in a privileged context such as the operating system kernel.
 > 
 
-![Untitled](eBPF%20Introduction%20e3b6e2ba1ad14ad898bb942a5d6a0478/Untitled.png)
+![](../images/aws-cni.png)
 
 Basically it’s a tool to run user programs inside the Linux kernel.
 
