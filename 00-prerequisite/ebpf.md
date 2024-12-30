@@ -1,11 +1,23 @@
 # eBPF Introduction
+- [Overview](#overview)
+   * [Example](#example)
+   * [Linux kernel implementation](#linux-kernel-implementation)
+      + [BPF hooks](#bpf-hooks)
+      + [Datapath](#datapath)
+- [Architecture](#architecture)
+   * [Compiler](#compiler)
+   * [**Loader**](#loader)
+   * [Verifier](#verifier)
+   * [JIT](#jit)
+   * [Hook Attaching](#hook-attaching)
+   * [Maps](#maps)
 
 # Overview
 
 > eBPF is a revolutionary technology with origins in the Linux kernel that can run sandboxed programs in a privileged context such as the operating system kernel.
 > 
 
-![](../images/aws-cni.png)
+![](../images/ebpf-overview.png)
 
 Basically it’s a tool to run user programs inside the Linux kernel.
 
@@ -102,12 +114,10 @@ BPF program is eventually executed [here](https://elixir.bootlin.com/linux/v5.14
         
 
 ### Datapath
-
-
+![](../images/ebpf-datapath.png)
 
 # Architecture
-
-![Screenshot 2023-06-12 at 14.00.21.png](eBPF%20Introduction%20e3b6e2ba1ad14ad898bb942a5d6a0478/Screenshot_2023-06-12_at_14.00.21.png)
+![](../images/bpf-map.png)
 
 ## [Compiler](https://ebpf.io/what-is-ebpf/#how-are-ebpf-programs-written)
 
