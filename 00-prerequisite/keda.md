@@ -1,6 +1,10 @@
 # KEDA DeepDive
-
-
+   * [Overview](#overview)
+   * [Deployments](#deployments)
+   * [CRDs](#crds)
+   * [AWS IAM Config](#aws-iam-config)
+   * [Architecture](#architecture)
+      + [keda-operator](#keda-operator)
 ## Overview
 
 [KEDA](https://keda.sh/) is a Kubernetes-based Event Driven Autoscaler with making use of [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). 
