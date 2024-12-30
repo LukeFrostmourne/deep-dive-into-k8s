@@ -458,13 +458,7 @@ maxNodesTotal            = flag.Int("max-nodes-total", 0, "Maximum number of nod
     }
     ```
     
-- find all possible options for pending nodes
-    
-    <aside>
-    💡 e.g. There’s a pending pod without any node selector, then memory-ondemand, memeory-spot, general… are all options.
-    
-    </aside>
-    
+- find all possible options for pending nodes 
     - group similar pods
         
         ```go
@@ -483,27 +477,6 @@ maxNodesTotal            = flag.Int("max-nodes-total", 0, "Maximum number of nod
         ```
         
         it gets the ownerReference of the pods, if they have the same owner then check the label and specs. 
-        
-        By doing this it avoids checking all pending pods unnecessarily.  But it was an issue in case of spark pods, the labels are not identical 
-        
-        ```yaml
-        	labels:
-            app: dataset-demo-4
-            attemptId: 40b8e95b6021e4a3ea77763fe7d725d2d
-            jobType: spark
-            podType: executor
-            spark-app-selector: spark-387ab2e26fcf4705b86e687b3f0d3b3c
-            spark-exec-id: '78'
-            spark-exec-resourceprofile-id: '0'
-            spark-role: executor
-            team: Data-Platform-SH_Non-Shared
-          ownerReferences:
-            - apiVersion: v1
-              kind: Pod
-              name: dataset-demo-4-0b8e95b6-021e-4a3e-a777-63fe7d725d2d
-              uid: 00b3c838-d5ec-4eaf-a254-a76f8dc16448
-              controller: true
-        ```
         
     - check each ASG to get all available options
         
