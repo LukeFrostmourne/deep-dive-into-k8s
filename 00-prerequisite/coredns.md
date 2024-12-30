@@ -9,7 +9,7 @@ In EKS, coredns forwards external dns query to AWS DNS server which could cause 
 
 ## Without local cache
 
-[https://whimsical.com/default-5MHZtQwa1wus8hX1bQEv9W](https://whimsical.com/default-5MHZtQwa1wus8hX1bQEv9W)
+![](../images/ipv4-dns.png)
 
 1. Pods will send DNS query to the nameserver in `/etc/resolv.conf` which was set by kubelet.
 2. DNS server IP is the service IP of kube-dns, queries will be forwarded to coredns pods based on iptables rules
@@ -104,7 +104,7 @@ In EKS, coredns forwards external dns query to AWS DNS server which could cause 
         
         **since raw rules are evaluated before nat rules, so the dns query will forward to the node-local-dns pod on the host. (that’s why no need to change kubelet config)**
         
-        ![Untitled](NodeLocal%20DNSCache%20IPv4%20(Deprecated)%20435023b2cff041d691899daab8591ced/Untitled.png)
+        ![](../images/iptables.png)
         
 - kube-dns-upstream
     
