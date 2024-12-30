@@ -141,7 +141,7 @@ node-local-dns will forward internal queries to CoreDNS pods by kube-dns-upstrea
 
 and forward external queries to AWS DNS.
 
-```json
+```
 cluster.local:53 {
         errors
         cache {
@@ -167,3 +167,82 @@ cluster.local:53 {
         prometheus :9253
 }
 ```
+
+# IPv6
+
+## Setup
+
+```bash
+k get ds -n kube-system node-local-dns
+NAME             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+node-local-dns   8         8         8       8            8           <none>          20m
+```
+
+node-local-dns pod [setups network](https://github.com/kubernetes/dns/blob/master/cmd/node-cache/app/cache_app.go#L74) once it starts.
+
+- it creates a dummy interface with IP `fd00::ffff` .
+    
+    ```bash
+    27974: nodelocaldns: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default
+        link/ether ce:a1:19:7a:b1:34 brd ff:ff:ff:ff:ff:ff
+        inet6 fd00::ffff/128 scope global
+           valid_lft forever preferred_lft forever
+    ```
+    
+    this IP is hardcoded for most clusters as long as it has no conflict with k8s service CIDR 
+    
+- it listens for both tcp and udp
+    
+    ```bash
+    tcp6       0      0 fd00::ffff:53           :::*                    LISTEN
+    udp6       0      0 fd00::ffff:53           :::*      
+    ```
+    
+
+## DNS query datapath
+
+- kubelet is using `fd00::ffff` as cluster-dns
+    
+    ```bash
+    # in host
+    /usr/bin/kubelet --cluster-dns=fd00::ffff
+    ```
+    
+- pod nameserver is set to `fd00::ffff` by kubelet, so dns query is sent to nodelocal dns pod.
+    
+    ```bash
+    $ cat /etc/resolv.conf 
+    
+    nameserver fd00::ffff
+    search kube-system.svc.cluster.local svc.cluster.local cluster.local ap-northeast-1.compute.internal
+    options ndots:5
+    ```
+    
+- nodelocal dns forwards k8s service query to kube-dns service(upstream coredns) and others to AWS route53 resolver
+    
+    ```
+    	cluster.local:53 {
+          errors
+          cache {
+                  success 9984 60
+                  denial 9984 5
+          }
+          reload
+          loop
+          bind fd00::ffff
+          forward . fd8b:0bab:fcd3::a {
+                  force_tcp
+          }
+          prometheus :9253
+          health [fd00::ffff]:9003
+          }
+      .:53 {
+          errors
+          cache 300
+          reload
+          loop
+          bind fd00::ffff
+          forward . /etc/resolv.conf
+          prometheus :9253
+          }
+    ```
