@@ -136,9 +136,7 @@ In EKS, coredns forwards external dns query to AWS DNS server which could cause 
     
 
 ### Architecture
-
-
-
+ ![](../images/dns-local.png)
 node-local-dns will forward internal queries to CoreDNS pods by kube-dns-upstream service,
 
 and forward external queries to AWS DNS.
